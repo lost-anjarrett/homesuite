@@ -8,9 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FreezerRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Freezer
 {
+    use DefaultDatetimeTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -28,16 +31,6 @@ class Freezer
      * @ORM\JoinColumn(nullable=false)
      */
     private $house;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateCreation;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\FreezerItem", mappedBy="freezer")
@@ -74,30 +67,6 @@ class Freezer
     public function setHouse(?House $house): self
     {
         $this->house = $house;
-
-        return $this;
-    }
-
-    public function getDateCreation(): ?\DateTimeInterface
-    {
-        return $this->dateCreation;
-    }
-
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
 
         return $this;
     }

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <p>nom : {{ house.name }}</p>
+    <div>
+        {% if house.menu is not empty %}
+            <a href="{{ path('menu_home', {menu: house.menu}) }}">Menu</a>
+        {% else %}
+            <a href="{{ path('menu_new') }}">Add Menu +</a>
+        {% endif %}
+    </div>
+    <div>
+        <a href="{{ path('freezer_home') }}">Add Freezer +</a>
+    </div>
+{% endblock %}

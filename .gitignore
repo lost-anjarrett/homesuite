@@ -20,4 +20,5 @@
 
 ###> appbundle ###
 /.idea/
+/src/DataFixtures/
 ###< appbundle ###

@@ -6,9 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FreezerItemCategoryRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class FreezerItemCategory
 {
+    use DefaultDatetimeTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -25,16 +28,6 @@ class FreezerItemCategory
      * @ORM\Column(type="integer")
      */
     private $defaultValidity;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateCreation;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
 
     public function getId(): ?int
     {
@@ -61,30 +54,6 @@ class FreezerItemCategory
     public function setDefaultValidity(int $defaultValidity): self
     {
         $this->defaultValidity = $defaultValidity;
-
-        return $this;
-    }
-
-    public function getDateCreation(): ?\DateTimeInterface
-    {
-        return $this->dateCreation;
-    }
-
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
 
         return $this;
     }

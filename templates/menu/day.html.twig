@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Day{% endblock %}
+{% block body %}
+    <h1>{{ date | date('Y-m-d') }}</h1>
+    <p>What do you plan to eat ?</p>
+    {% for form in forms %}
+        {{ form_start(form) }}
+        <h3>{{ form.vars.data.type }}</h3>
+        {{ form_widget(form) }}
+        <input type="submit" value="OK">
+        {{ form_end(form) }}
+    {% endfor %}
+{% endblock %}

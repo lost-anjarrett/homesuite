@@ -5,12 +5,16 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HouseRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class House
 {
+    use DefaultDatetimeTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -20,18 +24,9 @@ class House
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank()
      */
     private $name;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateCreation;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Menu", mappedBy="house", cascade={"persist", "remove"})
@@ -43,9 +38,15 @@ class House
      */
     private $freezers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="house")
+     */
+    private $habitants;
+
     public function __construct()
     {
         $this->freezers = new ArrayCollection();
+        $this->habitants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,30 +62,6 @@ class House
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDateCreation(): ?\DateTimeInterface
-    {
-        return $this->dateCreation;
-    }
-
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
 
         return $this;
     }
@@ -131,6 +108,37 @@ class House
             // set the owning side to null (unless already changed)
             if ($freezer->getHouse() === $this) {
                 $freezer->setHouse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getHabitants(): Collection
+    {
+        return $this->habitants;
+    }
+
+    public function addHabitant(User $habitant): self
+    {
+        if (!$this->habitants->contains($habitant)) {
+            $this->habitants[] = $habitant;
+            $habitant->setHouse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHabitant(User $habitant): self
+    {
+        if ($this->habitants->contains($habitant)) {
+            $this->habitants->removeElement($habitant);
+            // set the owning side to null (unless already changed)
+            if ($habitant->getHouse() === $this) {
+                $habitant->setHouse(null);
             }
         }
 

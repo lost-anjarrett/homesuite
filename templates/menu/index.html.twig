@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    {% for day in nextDays %}
+        <a href="{{ path('menu_day', {date: day|date('Ymd')}) }}">{{ day|date('l') }}</a>
+    {% endfor %}
+{% endblock %}

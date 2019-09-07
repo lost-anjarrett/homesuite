@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Meal;
+use App\Entity\Menu;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,22 +20,31 @@ class MealRepository extends ServiceEntityRepository
         parent::__construct($registry, Meal::class);
     }
 
-    // /**
-    //  * @return Meal[] Returns an array of Meal objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param Menu $menu
+     * @param \DateInterval|null $interval
+     *
+     * @return Meal[] Returns an array of Meal objects
+     * @throws \Exception
+     */
+    public function getComingMeals(Menu $menu, \DateInterval $interval = null)
     {
+        if ($interval !== null) {
+            // TODO
+            throw new \Exception('Ceci est un TODO enfoiré ! L\'intervalle n\'est pas géré');
+        }
+
         return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('m.menu = :val')
+            ->setParameter('val', $menu)
+            ->andWhere('m.date > :date')
+            ->setParameter('date', new \DateTime('today'))
+            ->orderBy('m.date', 'ASC')
+            ->setMaxResults(21)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Meal

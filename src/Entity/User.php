@@ -7,9 +7,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
+    use DefaultDatetimeTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -44,14 +47,9 @@ class User implements UserInterface
     private $active;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\ManyToOne(targetEntity="App\Entity\House", inversedBy="habitants")
      */
-    private $dateCreation;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
+    private $house;
 
 
     public function getId(): ?int
@@ -156,26 +154,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
+    public function getHouse(): ?House
     {
-        return $this->dateCreation;
+        return $this->house;
     }
 
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
+    public function setHouse(?House $house): self
     {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
+        $this->house = $house;
 
         return $this;
     }

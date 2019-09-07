@@ -6,9 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MenuRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Menu
 {
+    use DefaultDatetimeTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -21,11 +24,6 @@ class Menu
      * @ORM\JoinColumn(nullable=false)
      */
     private $house;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateCreation;
 
     public function getId(): ?int
     {
@@ -40,18 +38,6 @@ class Menu
     public function setHouse(House $house): self
     {
         $this->house = $house;
-
-        return $this;
-    }
-
-    public function getDateCreation(): ?\DateTimeInterface
-    {
-        return $this->dateCreation;
-    }
-
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
-    {
-        $this->dateCreation = $dateCreation;
 
         return $this;
     }

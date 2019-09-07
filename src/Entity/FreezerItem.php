@@ -8,9 +8,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FreezerItemRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class FreezerItem
 {
+    use DefaultDatetimeTrait;
+
     const UNITS = [
         'persons',
         'grams',
@@ -62,16 +65,6 @@ class FreezerItem
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateRemoval;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateCreation;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
@@ -164,30 +157,6 @@ class FreezerItem
     public function setDateRemoval(?\DateTimeInterface $dateRemoval): self
     {
         $this->dateRemoval = $dateRemoval;
-
-        return $this;
-    }
-
-    public function getDateCreation(): ?\DateTimeInterface
-    {
-        return $this->dateCreation;
-    }
-
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
 
         return $this;
     }

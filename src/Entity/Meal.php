@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Meal
 {
+    use DefaultDatetimeTrait;
+
     const TYPES = ['breakfast', 'lunch', 'dinner'];
     /**
      * @ORM\Id()
@@ -46,16 +48,6 @@ class Meal
      * @ORM\JoinColumn(nullable=false)
      */
     private $menu;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateCreation;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateUpdate;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
@@ -112,30 +104,6 @@ class Meal
     public function setMenu(?Menu $menu): self
     {
         $this->menu = $menu;
-
-        return $this;
-    }
-
-    public function getDateCreation(): ?\DateTimeInterface
-    {
-        return $this->dateCreation;
-    }
-
-    public function setDateCreation(\DateTimeInterface $dateCreation): self
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    public function getDateUpdate(): ?\DateTimeInterface
-    {
-        return $this->dateUpdate;
-    }
-
-    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
-    {
-        $this->dateUpdate = $dateUpdate;
 
         return $this;
     }
