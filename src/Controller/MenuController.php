@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Constraints\Length;
@@ -137,5 +138,28 @@ class MenuController extends AbstractController
 //            ->add('description', TextType::class, ['label' => false])
 //            ->getForm()
 //        ;
+    }
+
+    /**
+     * TODO allow POST only ?
+     * @Route("/meal-delete/{id}", name="meal_delete")
+     * @param Meal $meal
+     * @param EntityManagerInterface $manager
+     */
+    public function delete(Meal $meal, Request $request, EntityManagerInterface $manager, RouterInterface $router)
+    {
+        $manager->remove($meal);
+        $manager->flush();
+
+        $referer = $request->headers->get('referer');
+        $refererPathInfo = Request::create($referer)->getPathInfo();
+        $routeInfos = $router->match($refererPathInfo);
+
+        // get the Symfony route name
+        $refererRoute = $routeInfos['_route'];
+        unset($routeInfos['_route']);
+        unset($routeInfos['_controller']);
+
+        return $this->redirectToRoute($refererRoute, $routeInfos);
     }
 }
