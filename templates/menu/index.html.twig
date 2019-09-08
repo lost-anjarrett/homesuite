@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-    {% for day in nextDays %}
-        <a href="{{ path('menu_day', {date: day|date('Ymd')}) }}">{{ day|date('l') }}</a>
+    {% for day in comingDays %}
+        <a href="{{ path('menu_day', {date: day.dateFormatted}) }}">{{ day.dayOfWeek }}{{ (day.isMealPlanned) ? ' *' : ''}}</a>
     {% endfor %}
 {% endblock %}

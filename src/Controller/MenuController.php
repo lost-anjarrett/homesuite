@@ -11,6 +11,7 @@ use App\Service\MenuService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,10 +31,11 @@ class MenuController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function home(EntityManagerInterface $manager, MealRepository $repository, MenuService $menuService): Response
+    public function home(EntityManagerInterface $manager, MenuService $menuService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
+        /** @var Menu $menu */
         $menu = $manager
             ->getRepository(Menu::class)
             ->findOneBy(['house' => $user->getHouse()])
@@ -43,10 +45,9 @@ class MenuController extends AbstractController
             return $this->redirectToRoute('menu_new');
         }
 
-        $meals = $repository->getComingMeals($menu);
-        $nextDays = $menuService->getNextDays(7);
+        $comingDays = $menuService->getComingMenuDays($menu,7);
 
-        return $this->render('menu/index.html.twig', ['nextDays' => $nextDays]);
+        return $this->render('menu/index.html.twig', ['comingDays' => $comingDays]);
     }
 
     /**
@@ -82,47 +83,37 @@ class MenuController extends AbstractController
     /**
      * @Route("/day/{date}", name="day")
      */
-    public function showDay(string $date, Request $request)
+    public function showDay(string $date, Request $request, EntityManagerInterface $manager, MenuService $menuService)
     {
         $date = date_create_from_format('YmdHis', $date . '000000');
-
-        $breakfast = new Meal();
-        $breakfast->setType('breakfast');
-        $breakfast->setDate($date);
-        $lunch = new Meal();
-        $lunch->setType('lunch');
-        $lunch->setDate($date);
-        $dinner = new Meal();
-        $dinner->setType('dinner');
-        $dinner->setDate($date);
-        $formBreakfast = $this->createFormBuilder($breakfast)
-            ->add('description', TextType::class, ['label' => false])
-            ->getForm()
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var Menu $menu */
+        $menu = $manager
+            ->getRepository(Menu::class)
+            ->findOneBy(['house' => $user->getHouse()])
         ;
-        $formLunch = $this->createFormBuilder($lunch)
-            ->add('description', TextType::class, ['label' => false])
-            ->getForm()
-        ;
-        $formDinner = $this->createFormBuilder($dinner)
-            ->add('description', TextType::class, ['label' => false])
-            ->getForm()
-        ;
+        // Todo find meal from day and menu
+        $dayMeals = $menuService->getDayMeals($menu, $date);
 
         $forms = [
-            'breakfast' => $formBreakfast->createView(),
-            'lunch'     => $formLunch->createView(),
-            'dinner'    => $formDinner->createView(),
+            'breakfast' => $this->getMealForm('breakfast', $date, $dayMeals['breakfast'] ?? null)->createView(),
+            'lunch'     => $this->getMealForm('lunch', $date, $dayMeals['lunch'] ?? null)->createView(),
+            'dinner'    => $this->getMealForm('dinner', $date, $dayMeals['dinner'] ?? null)->createView(),
         ];
 
         return $this->render('menu/day.html.twig', ['forms' => $forms, 'date' => $date]);
     }
 
-    private function getMealForm($type, $date)
+    private function getMealForm(string $type, \DateTime $date, Meal $meal = null): FormInterface
     {
-        $meal = new Meal();
-        $dinner->setType($type);
-        $dinner->setDate($date);
-        $formDinner = $this->createFormBuilder($dinner)
+        if ($meal === null) {
+            $meal = new Meal();
+            $meal->setType($type);
+            $meal->setDate($date);
+        }
+
+        return $this->createFormBuilder($meal)
             ->add('description', TextType::class, ['label' => false])
             ->getForm()
         ;
