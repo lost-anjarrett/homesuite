@@ -24,26 +24,23 @@ class MealRepository extends ServiceEntityRepository
      * @param Menu $menu
      * @param \DateInterval|null $interval
      *
-     * @return array
+     * @return Meal[]
      * @throws \Exception
      */
-    public function getComingMealDates(Menu $menu, \DateTime $startingDate, \DateInterval $interval)
+    public function getComingMeals(Menu $menu, \DateTime $startingDate, \DateInterval $interval)
     {
         $endingDate = clone $startingDate;
+        $endingDate->add($interval);
 
-        $result =  $this->createQueryBuilder('m')
-            ->select('DISTINCT(m.date)')
+        return $this->createQueryBuilder('m')
             ->andWhere('m.menu = :val')
             ->setParameter('val', $menu)
             ->andWhere('m.date BETWEEN :from AND :to')
             ->setParameter('from', $startingDate)
-            ->setParameter('to', $endingDate->add($interval))
+            ->setParameter('to', $endingDate)
             ->orderBy('m.date', 'ASC')
-            ->getQuery()
-            ->getResult()
+            ->getQuery()->getResult()
         ;
-
-        return reset($result);
     }
 
     /*

@@ -6,6 +6,7 @@ use App\Entity\House;
 use App\Entity\Meal;
 use App\Entity\Menu;
 use App\Entity\User;
+use App\Form\MealType;
 use App\Repository\MealRepository;
 use App\Service\MenuService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -93,16 +94,33 @@ class MenuController extends AbstractController
             ->getRepository(Menu::class)
             ->findOneBy(['house' => $user->getHouse()])
         ;
-        // Todo find meal from day and menu
+
         $dayMeals = $menuService->getDayMeals($menu, $date);
 
         $forms = [
-            'breakfast' => $this->getMealForm('breakfast', $date, $dayMeals['breakfast'] ?? null)->createView(),
-            'lunch'     => $this->getMealForm('lunch', $date, $dayMeals['lunch'] ?? null)->createView(),
-            'dinner'    => $this->getMealForm('dinner', $date, $dayMeals['dinner'] ?? null)->createView(),
+            'breakfast' => $this->getMealForm('breakfast', $date, $dayMeals['breakfast'] ?? null),
+            'lunch'     => $this->getMealForm('lunch', $date, $dayMeals['lunch'] ?? null),
+            'dinner'    => $this->getMealForm('dinner', $date, $dayMeals['dinner'] ?? null),
         ];
 
-        return $this->render('menu/day.html.twig', ['forms' => $forms, 'date' => $date]);
+        /** @var FormInterface $form */
+        foreach ($forms as $form) {
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+//                /** @var Meal $meal */
+                $meal = $form->getData();
+                $meal->setMenu($menu);
+                $meal->setCreator($user);
+                $manager->persist($meal);
+                $manager->flush();
+            }
+        }
+
+        $formViews = array_map(function(FormInterface $form) {
+            return $form->createView();
+        }, $forms);
+
+        return $this->render('menu/day.html.twig', ['forms' => $formViews, 'date' => $date]);
     }
 
     private function getMealForm(string $type, \DateTime $date, Meal $meal = null): FormInterface
@@ -113,9 +131,11 @@ class MenuController extends AbstractController
             $meal->setDate($date);
         }
 
-        return $this->createFormBuilder($meal)
-            ->add('description', TextType::class, ['label' => false])
-            ->getForm()
-        ;
+        return $this->get('form.factory')->createNamed($type, MealType::class, $meal);
+
+//        return $this->createFormBuilder($meal)
+//            ->add('description', TextType::class, ['label' => false])
+//            ->getForm()
+//        ;
     }
 }

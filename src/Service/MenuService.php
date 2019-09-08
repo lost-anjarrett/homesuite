@@ -52,12 +52,20 @@ class MenuService
         $comingMenuDays = [];
 
         $nextDays = $this->getNextDays($days);
-        $comingMeals = $this->mealRepository
-            ->getComingMealDates($menu, new \DateTime('today'), new \DateInterval('P'.$days.'D'))
-        ;
+
+        $comingMeals = $this->mealRepository->getComingMeals(
+            $menu,
+            new \DateTime('today'),
+            new \DateInterval('P'.$days.'D')
+        );
+
+        $mealDates = array_map(function (Meal $meal) {
+            return $meal->getDate()->format('Ymd');
+        }, $comingMeals);
+        $mealDates = array_unique($mealDates);
 
         foreach ($nextDays as $nextDay) {
-            $hasPlannedMeal = in_array($nextDay->format('Y-m-d H:i:s'), $comingMeals);
+            $hasPlannedMeal = in_array($nextDay->format('Ymd'), $mealDates);
             $comingMenuDays[] = new ComingMenuDay($nextDay, $hasPlannedMeal);
         }
 
