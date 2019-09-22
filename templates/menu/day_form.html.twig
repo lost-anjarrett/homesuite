@@ -1,0 +1,10 @@
+{{ form_start(form) }}
+<div class="col-2">
+    <h4>{{ form.vars.data.date | date('Y-m-d') }}</h4>
+</div>
+{% for meal in form.meals %}
+    <h5>{{ meal.vars.data.type }}</h5>
+    <div class="col-9">{{ form_row(meal.description) }}</div>
+{% endfor %}
+<input type="submit" value="OK" class="btn">
+{{ form_end(form) }}

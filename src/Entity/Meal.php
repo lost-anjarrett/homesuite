@@ -24,7 +24,6 @@ abstract class Meal
 {
     use DefaultDatetimeTrait;
 
-    const TYPES = ['breakfast', 'lunch', 'dinner'];
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -33,7 +32,7 @@ abstract class Meal
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $description;
 
@@ -44,7 +43,7 @@ abstract class Meal
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $creator;
 
@@ -58,7 +57,7 @@ abstract class Meal
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(string $description = null): self
     {
         $this->description = $description;
 

@@ -8,10 +8,10 @@ use App\Entity\Breakfast;
 use App\Entity\Day;
 use App\Entity\Dinner;
 use App\Entity\Lunch;
-use App\Entity\Meal;
 use App\Entity\Menu;
 use App\Repository\MealRepository;
 use App\ValueObject\ComingMenuDay;
+use Doctrine\Common\Collections\Collection;
 
 class MenuService
 {
@@ -29,42 +29,20 @@ class MenuService
     /**
      * Returns the current day + the next {days} days
      *
-     * @param int $days
+     * @param Menu $menu
+     * @param int $numberOfDays
      *
-     * @return array
+     * @return array|Day[]
      * @throws \Exception
      */
-    public function getNextDays(int $days)
+    public function getNextNewDays(Menu $menu, int $numberOfDays): array
     {
         $nextDays = [];
-        for ($i=0; $i<=$days; $i++) {
-            $nextDays[] = new \DateTime('today + '.$i.' day');
+        for ($i=0; $i<=$numberOfDays; $i++) {
+            $nextDays[] = $this->getNewDay($menu, new \DateTime('today + '.$i.' day'));
         }
 
         return $nextDays;
-    }
-
-    /**
-     * @param Menu $menu
-     * @param int $days
-     *
-     * @return ComingMenuDay[]
-     * @throws \Exception
-     */
-    public function getComingMenuDays(Menu $menu, int $numberOfDays)
-    {
-        $comingMenuDays = [];
-
-        $nextDays = $this->getNextDays($menu, $numberOfDays);
-
-        return $comingMenuDays;
-    }
-
-    public function getDayMeals(Menu $menu, \DateTime $date)
-    {
-        $results = null;
-
-        return $results;
     }
 
     public function getNewDay(Menu $menu, \DateTime $date)
@@ -80,5 +58,28 @@ class MenuService
         $day->addMeal($dinner);
 
         return $day;
+    }
+
+    public function isDayPlanned(Day $day, Collection $plannedDays)
+    {
+        return $plannedDays->exists(function ($key, Day $plannedDay) use ($day) {
+            return $day->getDate() == $plannedDay->getDate();
+        });
+    }
+
+    public function fillPlanningWithNewDays(Menu $menu)
+    {
+        $nextNewDays = $this->getNextNewDays($menu, 7);
+        $plannedDays = $menu->getPlannedDays();
+
+        foreach ($nextNewDays as $nextNewDay) {
+            if (!$this->isDayPlanned($nextNewDay, $plannedDays)) {
+                $plannedDays->add($nextNewDay);
+            }
+        }
+
+        // Fixme: have to find a way to sort by date, for now, persisted days are rendered first
+
+        return $plannedDays;
     }
 }

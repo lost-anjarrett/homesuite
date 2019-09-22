@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +28,16 @@ class Menu
      */
     private $house;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Day", mappedBy="menu")
+     */
+    private $days;
+
+    public function __construct()
+    {
+        $this->days = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -40,5 +53,22 @@ class Menu
         $this->house = $house;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Day[]
+     * @throws \Exception
+     */
+    public function getPlannedDays(): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->gte('date', new \DateTime('today')));
+
+        return $this->days->matching($criteria);
+    }
+
+    public function addDay(Day $day)
+    {
+        $this->days->add($day);
     }
 }

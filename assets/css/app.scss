@@ -24,9 +24,15 @@ html {
     text-align: left;
 }
 
-.btn {
+.btn, 
+a.btn, 
+input[type="submit"].btn,
+button.btn {
     color: $isabelline;
     background: $tropical_rain_forest;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
 }
 
 a {

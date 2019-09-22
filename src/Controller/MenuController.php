@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Form\BreakfastType;
 use App\Form\DayType;
 use App\Form\MealType;
+use App\Form\PlanningType;
 use App\Repository\MealRepository;
 use App\Service\MenuService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,7 +40,7 @@ class MenuController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function home(EntityManagerInterface $manager, MenuService $menuService): Response
+    public function home(EntityManagerInterface $manager, Request $request, MenuService $menuService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -53,24 +54,24 @@ class MenuController extends AbstractController
             return $this->redirectToRoute('menu_new');
         }
 
-        $comingDays = [];
+        $plannedDays = $menuService->fillPlanningWithNewDays($menu);
 
-        $day = new Day();
-        $day->setMenu($menu);
-        $day->setDate(new \DateTime());
-        $breakfast = new Breakfast();
-        $day->addMeal($breakfast);
-        $lunch = new Lunch();
-        $day->addMeal($lunch);
-        $dinner = new Dinner();
-        $day->addMeal($dinner);
+        $form = $this->createForm(PlanningType::class, ['days' => $plannedDays]);
 
-        $form = $this->createForm(DayType::class, $day);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $days = $form->getData()['days'];
+            foreach ($days as $day) {
+                $manager->persist($day);
+            }
+            $manager->flush();
+
+            return $this->redirectToRoute('menu_home');
+        }
 
         return $this->render('menu/index_form.html.twig', [
-            'comingDays' => $comingDays,
             'form' => $form->createView(),
-            'breakfast' => $breakfast,
+            'plannedDays' => $plannedDays,
         ]);
     }
 

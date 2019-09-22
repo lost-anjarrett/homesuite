@@ -4,11 +4,18 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DayRepository")
  * @ORM\HasLifecycleCallbacks()
+ *
+ * @UniqueEntity(
+ *     fields={"date", "menu"},
+ *     errorPath="date",
+ *     message="Cannot plan same day multiple times"
+ * )
  */
 class Day
 {
@@ -32,7 +39,7 @@ class Day
     private $menu;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Meal", mappedBy="day")
+     * @ORM\OneToMany(targetEntity="App\Entity\Meal", mappedBy="day", cascade={"persist", "remove"})
      */
     private $meals;
 

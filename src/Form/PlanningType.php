@@ -18,13 +18,14 @@ class PlanningType extends AbstractType
         $builder->add('days', CollectionType::class, [
             'entry_type' => DayType::class,
             'entry_options' => [],
-        ]);
-    }
+            'allow_delete' => true,
+            'delete_empty' => function (Day $day) {
+                foreach ($day->getMeals() as $meal) {
+                    if (!empty($meal->getDescription())) return false;
+                };
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => Day::class
+                return true;
+            },
         ]);
     }
 }
