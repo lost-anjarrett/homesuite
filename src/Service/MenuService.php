@@ -15,17 +15,6 @@ use Doctrine\Common\Collections\Collection;
 class MenuService
 {
     /**
-     * @var MealRepository
-     */
-    private $mealRepository;
-
-    public function __construct(MealRepository $repository)
-    {
-        $this->mealRepository = $repository;
-
-    }
-
-    /**
      * @param Menu $menu
      *
      * @return Day[]|Collection
@@ -56,7 +45,7 @@ class MenuService
      * @return array|Day[]
      * @throws \Exception
      */
-    public function getNextNewDays(Menu $menu, int $numberOfDays): array
+    private function getNextNewDays(Menu $menu, int $numberOfDays): array
     {
         $nextDays = [];
         for ($i = 0; $i <= $numberOfDays; $i++) {
@@ -66,7 +55,7 @@ class MenuService
         return $nextDays;
     }
 
-    public function getNewDay(Menu $menu, \DateTime $date)
+    private function getNewDay(Menu $menu, \DateTime $date)
     {
         $day = new Day();
         $day->setMenu($menu);
@@ -81,7 +70,7 @@ class MenuService
         return $day;
     }
 
-    public function isDayPlanned(Day $day, Collection $plannedDays)
+    private function isDayPlanned(Day $day, Collection $plannedDays)
     {
         return $plannedDays->exists(function ($key, Day $plannedDay) use ($day) {
             return $day->getDate() == $plannedDay->getDate();

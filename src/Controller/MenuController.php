@@ -69,7 +69,7 @@ class MenuController extends AbstractController
             return $this->redirectToRoute('menu_home');
         }
 
-        return $this->render('menu/index_form.html.twig', [
+        return $this->render('menu/index.html.twig', [
             'form' => $form->createView(),
             'plannedDays' => $plannedDays,
         ]);
@@ -77,6 +77,10 @@ class MenuController extends AbstractController
 
     /**
      * @Route("/new", name="new")
+     * 
+     * @param EntityManagerInterface $manager
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function newMenu(EntityManagerInterface $manager)
     {
@@ -94,25 +98,5 @@ class MenuController extends AbstractController
         $manager->flush();
 
         return $this->redirectToRoute('menu_home');
-    }
-
-    private function getMealForm(string $type, \DateTime $date, Meal $meal = null): FormInterface
-    {
-        if ($meal === null) {
-            throw new \Exception('chauuuud');
-        }
-
-        return $this->get('form.factory')->createNamed($date->format(('Ymd')).'_'.$type, MealType::class, $meal);
-    }
-
-    /**
-     * TODO allow POST only ?
-     * @Route("/meal-delete/{id}", name="meal_delete")
-     * @param Meal $meal
-     * @param EntityManagerInterface $manager
-     */
-    public function delete(Meal $meal, Request $request, EntityManagerInterface $manager, RouterInterface $router)
-    {
-        return;
     }
 }
