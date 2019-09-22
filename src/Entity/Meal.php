@@ -9,13 +9,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MealRepository")
  * @ORM\HasLifecycleCallbacks()
+ *
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"breakfast" = "Breakfast", "lunch" = "Lunch", "dinner" = "Dinner"})
+ *
  * @UniqueEntity(
- *     fields={"date", "type"},
+ *     fields={"day", "type"},
  *     errorPath="type",
- *     message="A meal of this type is already planned for this date."
+ *     message="A meal of this type is already planned for this day."
  * )
  */
-class Meal
+abstract class Meal
 {
     use DefaultDatetimeTrait;
 
@@ -25,64 +30,27 @@ class Meal
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $date;
-
-    /**
-     * @ORM\Column(type="string", length=15)
-     * @Assert\Choice(choices=Meal::TYPES, message="Choose an existing meal type")
-     */
-    private $type;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
      */
-    private $description;
+    protected $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Menu")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Day", inversedBy="meals")
      */
-    private $menu;
+    protected $day;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $creator;
+    protected $creator;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
     }
 
     public function getDescription(): ?string
@@ -93,18 +61,6 @@ class Meal
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getMenu(): ?Menu
-    {
-        return $this->menu;
-    }
-
-    public function setMenu(?Menu $menu): self
-    {
-        $this->menu = $menu;
 
         return $this;
     }
@@ -120,4 +76,21 @@ class Meal
 
         return $this;
     }
+
+    public function getDay(): ?Day
+    {
+        return $this->day;
+    }
+
+    public function setDay(?Day $day): self
+    {
+        $this->day = $day;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getType(): string;
 }

@@ -4,6 +4,10 @@
 namespace App\Service;
 
 
+use App\Entity\Breakfast;
+use App\Entity\Day;
+use App\Entity\Dinner;
+use App\Entity\Lunch;
 use App\Entity\Meal;
 use App\Entity\Menu;
 use App\Repository\MealRepository;
@@ -47,48 +51,34 @@ class MenuService
      * @return ComingMenuDay[]
      * @throws \Exception
      */
-    public function getComingMenuDays(Menu $menu, int $days)
+    public function getComingMenuDays(Menu $menu, int $numberOfDays)
     {
         $comingMenuDays = [];
 
-        $nextDays = $this->getNextDays($days);
-
-        $comingMeals = $this->mealRepository->getComingMeals(
-            $menu,
-            new \DateTime('today'),
-            new \DateInterval('P'.$days.'D')
-        );
-
-        $mealDates = array_map(function (Meal $meal) {
-            return $meal->getDate()->format('Ymd');
-        }, $comingMeals);
-        $mealDates = array_unique($mealDates);
-
-        foreach ($nextDays as $nextDay) {
-            $hasPlannedMeal = in_array($nextDay->format('Ymd'), $mealDates);
-            $comingMenuDays[] = new ComingMenuDay($nextDay, $hasPlannedMeal);
-        }
+        $nextDays = $this->getNextDays($menu, $numberOfDays);
 
         return $comingMenuDays;
     }
 
     public function getDayMeals(Menu $menu, \DateTime $date)
     {
-        $results = $this->mealRepository->findBy(['menu' => $menu, 'date' => $date]);
-
-        if (count($results) > 3) {
-            throw new \LogicException('It can only be 3 meals a day, '.count($results).' were found for menu '.$menu->getId());
-        }
-
-        /**
-         * @var int $key
-         * @var Meal $meal
-         */
-        foreach ($results as $key => $meal) {
-            $results[$meal->getType()] = $meal;
-            unset($results[$key]);
-        }
+        $results = null;
 
         return $results;
+    }
+
+    public function getNewDay(Menu $menu, \DateTime $date)
+    {
+        $day = new Day();
+        $day->setMenu($menu);
+        $day->setDate($date);
+        $breakfast = new Breakfast();
+        $day->addMeal($breakfast);
+        $lunch = new Lunch();
+        $day->addMeal($lunch);
+        $dinner = new Dinner();
+        $day->addMeal($dinner);
+
+        return $day;
     }
 }
