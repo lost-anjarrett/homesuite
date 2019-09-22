@@ -2,8 +2,88 @@
 
 {% block title %}Home{% endblock %}
 
-{% block body %}
-    {% for day in comingDays %}
-        <a href="{{ path('menu_day', {date: day.dateFormatted}) }}">{{ day.dayOfWeek }}{{ (day.isMealPlanned) ? ' *' : ''}}</a>
-    {% endfor %}
+{% block page_title %}Week{% endblock %}
+
+{% block page_content %}
+        {% for day in comingDays %}
+            <div class="row text-center space-after-all">
+                <div class="col-2">
+                    <a
+                            class="app-dayOfWeek"
+                            data-date-id="{{ day.dateFormatted }}"
+                            href="{{ path('menu_day', {date: day.dateFormatted}) }}">
+                        {{ day.dayOfWeek }}
+                        {{ (day.isMealPlanned) ? ' *' : ''}}
+                    </a>
+                </div>
+                <div class="col-9  text-left" id="response_{{ day.dateFormatted }}"></div>
+            </div>
+        {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        // Create and send a GET request
+        // The first argument is the post type (GET, POST, PUT, DELETE, etc.)
+        // The second argument is the endpoint URL
+        document.addEventListener("DOMContentLoaded", function () {
+            // Set up our HTTP request
+            const links = document.getElementsByClassName('app-dayOfWeek');
+
+            for (i=0;i<links.length;i++) {
+                // Load the form first
+                let xhr = new XMLHttpRequest();
+                let responseContainer = document.getElementById('response_' + links[i].dataset.dateId);
+
+                // Setup our listener to process completed requests
+                xhr.onload = function () {
+
+                    // Process our return data
+                    if (this.status >= 200 && this.status < 300) {
+                        // What do when the request is successful
+                        responseContainer.innerHTML = this.responseText;
+                    } else {
+                        // What do when the request fails
+                        responseContainer.innerText = 'Something wrong happened';
+                    }
+                };
+
+                xhr.open('GET', links[i].href);
+                xhr.send();
+
+                links[i].addEventListener('click', function (ev) {
+
+                    var xhr2 = new XMLHttpRequest();
+                    const clicked = ev.target;
+                    var responseContainer2 = document.getElementById('response_' + clicked.dataset.dateId);
+
+                    // Setup our listener to process completed requests
+                    xhr2.onload = function (ev) {
+
+                        // Process our return data
+                        if (xhr2.status >= 200 && xhr2.status < 300) {
+                            // What do when the request is successful
+                            responseContainer2.innerHTML = this.responseText;
+                        } else {
+                            // What do when the request fails
+                            responseContainer2.innerText = 'Something wrong happened';
+                        }
+                    };
+
+                    ev.preventDefault();
+                    xhr2.open('POST', clicked.href);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.setRequestHeader('Accept', 'application/xml');
+
+                    xhr2.send(JSON.stringify({
+                        "name": value
+                    }));
+                });
+                links[i].click();
+            }
+        });
+
+    </script>
 {% endblock %}

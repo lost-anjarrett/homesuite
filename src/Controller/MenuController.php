@@ -107,8 +107,9 @@ class MenuController extends AbstractController
         /** @var FormInterface $form */
         foreach ($forms as $form) {
             $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-//                /** @var Meal $meal */
+            if ($request->isXmlHttpRequest()) {
+                die('tptp');
+                /** @var Meal $meal */
                 $meal = $form->getData();
                 $meal->setMenu($menu);
                 $meal->setCreator($user);
@@ -121,7 +122,7 @@ class MenuController extends AbstractController
             return $form->createView();
         }, $forms);
 
-        return $this->render('menu/day.html.twig', ['forms' => $formViews, 'date' => $date]);
+        return $this->render('menu/day.ajax.html.twig', ['forms' => $formViews, 'date' => $date, 'y' => $dayMeals]);
     }
 
     private function getMealForm(string $type, \DateTime $date, Meal $meal = null): FormInterface
@@ -132,12 +133,7 @@ class MenuController extends AbstractController
             $meal->setDate($date);
         }
 
-        return $this->get('form.factory')->createNamed($type, MealType::class, $meal);
-
-//        return $this->createFormBuilder($meal)
-//            ->add('description', TextType::class, ['label' => false])
-//            ->getForm()
-//        ;
+        return $this->get('form.factory')->createNamed($date->format(('Ymd')).'_'.$type, MealType::class, $meal);
     }
 
     /**

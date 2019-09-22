@@ -1,0 +1,14 @@
+{% for form in forms %}
+    <div class="col-sm text-center">
+        {{ form_start(form) }}
+        <h3>{{ form.vars.data.type }}</h3>
+        {{ form_widget(form) }}
+        <input class="btn" type="submit" value="OK">
+        {% if form.vars.data.id is not null %}
+            <a href="{{ path('menu_meal_delete', {id: form.vars.data.id}) }}">X</a>
+        {% endif %}
+        {{ form_end(form) }}
+    </div>
+{% endfor %}
+
+    {{ dump(y) }}

@@ -1,12 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block body %}
+            <div class="container-fluid">
+                <header class="row">
+                    <div class="col-sm"></div>
+                    <div class="col-sm text-center">
+                        <h1>{% block page_title %}{% endblock %}</h1>
+                    </div>
+                    <div class="col-sm"></div>
+                </header>
+                <main class="row">
+                    <div class="col-sm"></div>
+                    <div class="col-sm">
+                        {% block page_content %}{% endblock %}
+                    </div>
+                    <div class="col-sm"></div>
+                </main>
+                <footer class="row">
+                    {% block page_footer%}{% endblock %}
+                </footer>
+            </div>
+        {% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
     </body>
 </html>

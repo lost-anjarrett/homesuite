@@ -1,0 +1,50 @@
+$tropical_rain_forest: #09755D;
+$smoky_black: #0A090C;
+$isabelline: #F0EDEE;
+$rich_black: #07393C;
+$baby_blue: #90DDF0;
+
+
+/*  */
+body,
+html {
+    background-color: $isabelline;
+    color: $smoky_black;
+    /*font-family: 'Quicksand', sans-serif;*/
+    font-family: 'Nanum Gothic', sans-serif;
+}
+
+.text-center {
+    text-align: center;
+}
+.text-right {
+    text-align: right;
+}
+.text-left {
+    text-align: left;
+}
+
+.btn {
+    color: $isabelline;
+    background: $tropical_rain_forest;
+}
+
+a {
+    text-decoration: underline;
+    color: $tropical_rain_forest;
+}
+
+a:hover {
+    color: $tropical_rain_forest;
+    font-weight: bold;
+}
+
+.space-after-all + .space-after-all {
+    margin-top: 8px;
+}
+
+.space-after-all {
+    form + form {
+        margin-top: 8px;
+    }
+}
