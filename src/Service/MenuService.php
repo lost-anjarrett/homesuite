@@ -10,7 +10,6 @@ use App\Entity\Dinner;
 use App\Entity\Lunch;
 use App\Entity\Menu;
 use App\Repository\MealRepository;
-use App\ValueObject\ComingMenuDay;
 use Doctrine\Common\Collections\Collection;
 
 class MenuService
@@ -27,6 +26,28 @@ class MenuService
     }
 
     /**
+     * @param Menu $menu
+     *
+     * @return Day[]|Collection
+     * @throws \Exception
+     */
+    public function fillPlanningWithNewDays(Menu $menu)
+    {
+        $nextNewDays = $this->getNextNewDays($menu, 7);
+        $plannedDays = $menu->getPlannedDays();
+
+        foreach ($nextNewDays as $nextNewDay) {
+            if (!$this->isDayPlanned($nextNewDay, $plannedDays)) {
+                $plannedDays->add($nextNewDay);
+            }
+        }
+
+        // Fixme: have to find a way to sort by date, for now, persisted days are rendered first
+
+        return $plannedDays;
+    }
+
+    /**
      * Returns the current day + the next {days} days
      *
      * @param Menu $menu
@@ -38,8 +59,8 @@ class MenuService
     public function getNextNewDays(Menu $menu, int $numberOfDays): array
     {
         $nextDays = [];
-        for ($i=0; $i<=$numberOfDays; $i++) {
-            $nextDays[] = $this->getNewDay($menu, new \DateTime('today + '.$i.' day'));
+        for ($i = 0; $i <= $numberOfDays; $i++) {
+            $nextDays[] = $this->getNewDay($menu, new \DateTime('today + ' . $i . ' day'));
         }
 
         return $nextDays;
@@ -65,21 +86,5 @@ class MenuService
         return $plannedDays->exists(function ($key, Day $plannedDay) use ($day) {
             return $day->getDate() == $plannedDay->getDate();
         });
-    }
-
-    public function fillPlanningWithNewDays(Menu $menu)
-    {
-        $nextNewDays = $this->getNextNewDays($menu, 7);
-        $plannedDays = $menu->getPlannedDays();
-
-        foreach ($nextNewDays as $nextNewDay) {
-            if (!$this->isDayPlanned($nextNewDay, $plannedDays)) {
-                $plannedDays->add($nextNewDay);
-            }
-        }
-
-        // Fixme: have to find a way to sort by date, for now, persisted days are rendered first
-
-        return $plannedDays;
     }
 }
