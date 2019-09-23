@@ -33,21 +33,35 @@ class Menu
      */
     private $days;
 
+    /**
+     * Menu constructor.
+     */
     public function __construct()
     {
         $this->days = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getHouse(): ?House
+    /**
+     * @return House|null
+     */
+    public function getHouse()
     {
         return $this->house;
     }
 
+    /**
+     * @param House $house
+     *
+     * @return Menu
+     */
     public function setHouse(House $house): self
     {
         $this->house = $house;
@@ -67,6 +81,9 @@ class Menu
         return $this->days->matching($criteria);
     }
 
+    /**
+     * @param Day $day
+     */
     public function addDay(Day $day)
     {
         $this->days->add($day);

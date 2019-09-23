@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MealRepository")
@@ -47,16 +46,27 @@ abstract class Meal
      */
     protected $creator;
 
-    public function getId(): ?int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return string|null
+     */
+    public function getDescription()
     {
         return $this->description;
     }
 
+    /**
+     * @param string|null $description
+     *
+     * @return Meal
+     */
     public function setDescription(string $description = null): self
     {
         $this->description = $description;
@@ -64,24 +74,40 @@ abstract class Meal
         return $this;
     }
 
-    public function getCreator(): ?User
+    /**
+     * @return User|null
+     */
+    public function getCreator()
     {
         return $this->creator;
     }
 
-    public function setCreator(?User $creator): self
+    /**
+     * @param User|null $creator
+     *
+     * @return Meal
+     */
+    public function setCreator(User $creator = null): self
     {
         $this->creator = $creator;
 
         return $this;
     }
 
-    public function getDay(): ?Day
+    /**
+     * @return Day|null
+     */
+    public function getDay()
     {
         return $this->day;
     }
 
-    public function setDay(?Day $day): self
+    /**
+     * @param Day|null $day
+     *
+     * @return Meal
+     */
+    public function setDay(Day $day = null): self
     {
         $this->day = $day;
 

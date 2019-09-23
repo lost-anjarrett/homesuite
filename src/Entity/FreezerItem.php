@@ -72,28 +72,47 @@ class FreezerItem
      */
     private $creator;
 
-    public function getId(): ?int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getCategory(): ?FreezerItemCategory
+    /**
+     * @return FreezerItemCategory|null
+     */
+    public function getCategory()
     {
         return $this->category;
     }
 
-    public function setCategory(?FreezerItemCategory $category): self
+    /**
+     * @param FreezerItemCategory|null $category
+     *
+     * @return FreezerItem
+     */
+    public function setCategory(FreezerItemCategory $category = null): self
     {
         $this->category = $category;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    /**
+     * @return string|null
+     */
+    public function getDescription()
     {
         return $this->description;
     }
 
+    /**
+     * @param string $description
+     *
+     * @return FreezerItem
+     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -101,11 +120,19 @@ class FreezerItem
         return $this;
     }
 
-    public function getQuantity(): ?int
+    /**
+     * @return int|null
+     */
+    public function getQuantity()
     {
         return $this->quantity;
     }
 
+    /**
+     * @param int $quantity
+     *
+     * @return FreezerItem
+     */
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
@@ -113,11 +140,19 @@ class FreezerItem
         return $this;
     }
 
-    public function getUnit(): ?string
+    /**
+     * @return string|null
+     */
+    public function getUnit()
     {
         return $this->unit;
     }
 
+    /**
+     * @param string $unit
+     *
+     * @return FreezerItem
+     */
     public function setUnit(string $unit): self
     {
         $this->unit = $unit;
@@ -125,11 +160,19 @@ class FreezerItem
         return $this;
     }
 
-    public function getDateExpiry(): ?\DateTimeInterface
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getDateExpiry()
     {
         return $this->dateExpiry;
     }
 
+    /**
+     * @param \DateTimeInterface $dateExpiry
+     *
+     * @return FreezerItem
+     */
     public function setDateExpiry(\DateTimeInterface $dateExpiry): self
     {
         $this->dateExpiry = $dateExpiry;
@@ -137,36 +180,60 @@ class FreezerItem
         return $this;
     }
 
-    public function getFreezer(): ?Freezer
+    /**
+     * @return Freezer|null
+     */
+    public function getFreezer()
     {
         return $this->freezer;
     }
 
-    public function setFreezer(?Freezer $freezer): self
+    /**
+     * @param Freezer|null $freezer
+     *
+     * @return FreezerItem
+     */
+    public function setFreezer(Freezer $freezer = null): self
     {
         $this->freezer = $freezer;
 
         return $this;
     }
 
-    public function getDateRemoval(): ?\DateTimeInterface
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getDateRemoval()
     {
         return $this->dateRemoval;
     }
 
-    public function setDateRemoval(?\DateTimeInterface $dateRemoval): self
+    /**
+     * @param \DateTimeInterface|null $dateRemoval
+     *
+     * @return FreezerItem
+     */
+    public function setDateRemoval(\DateTimeInterface $dateRemoval = null): self
     {
         $this->dateRemoval = $dateRemoval;
 
         return $this;
     }
 
-    public function getCreator(): ?User
+    /**
+     * @return User|null
+     */
+    public function getCreator()
     {
         return $this->creator;
     }
 
-    public function setCreator(?User $creator): self
+    /**
+     * @param User|null $creator
+     *
+     * @return FreezerItem
+     */
+    public function setCreator(User $creator = null): self
     {
         $this->creator = $creator;
 

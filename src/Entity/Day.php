@@ -48,12 +48,18 @@ class Day
         $this->meals = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getDate()
     {
         return $this->date;
     }
@@ -65,12 +71,15 @@ class Day
         return $this;
     }
 
-    public function getMenu(): ?Menu
+    /**
+     * @return Menu|null
+     */
+    public function getMenu()
     {
         return $this->menu;
     }
 
-    public function setMenu(?Menu $menu): self
+    public function setMenu(Menu $menu = null): self
     {
         $this->menu = $menu;
 

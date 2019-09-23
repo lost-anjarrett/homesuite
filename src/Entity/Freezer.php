@@ -42,12 +42,18 @@ class Freezer
         $this->items = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string|null
+     */
+    public function getName()
     {
         return $this->name;
     }
@@ -59,12 +65,15 @@ class Freezer
         return $this;
     }
 
-    public function getHouse(): ?House
+    /**
+     * @return House|null
+     */
+    public function getHouse()
     {
         return $this->house;
     }
 
-    public function setHouse(?House $house): self
+    public function setHouse(House $house = null): self
     {
         $this->house = $house;
 

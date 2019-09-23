@@ -43,22 +43,36 @@ class House
      */
     private $habitants;
 
+    /**
+     * House constructor.
+     */
     public function __construct()
     {
         $this->freezers = new ArrayCollection();
         $this->habitants = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string|null
+     */
+    public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return House
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -66,11 +80,19 @@ class House
         return $this;
     }
 
-    public function getMenu(): ?Menu
+    /**
+     * @return Menu|null
+     */
+    public function getMenu()
     {
         return $this->menu;
     }
 
+    /**
+     * @param Menu $menu
+     *
+     * @return House
+     */
     public function setMenu(Menu $menu): self
     {
         $this->menu = $menu;

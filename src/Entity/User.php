@@ -52,16 +52,27 @@ class User implements UserInterface
     private $house;
 
 
-    public function getId(): ?int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    /**
+     * @return string|null
+     */
+    public function getEmail()
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     *
+     * @return User
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -91,6 +102,11 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     *
+     * @return User
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -130,23 +146,39 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string|null
+     */
+    public function getName()
     {
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    /**
+     * @param string|null $name
+     *
+     * @return User
+     */
+    public function setName(string $name = null): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getActive(): ?bool
+    /**
+     * @return bool|null
+     */
+    public function getActive()
     {
         return $this->active;
     }
 
+    /**
+     * @param bool $active
+     *
+     * @return User
+     */
     public function setActive(bool $active): self
     {
         $this->active = $active;
@@ -154,12 +186,20 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getHouse(): ?House
+    /**
+     * @return House|null
+     */
+    public function getHouse()
     {
         return $this->house;
     }
 
-    public function setHouse(?House $house): self
+    /**
+     * @param House|null $house
+     *
+     * @return User
+     */
+    public function setHouse(House $house = null): self
     {
         $this->house = $house;
 

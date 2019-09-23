@@ -29,16 +29,27 @@ class FreezerItemCategory
      */
     private $defaultValidity;
 
-    public function getId(): ?int
+    /**
+     * @return int|null
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string|null
+     */
+    public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return FreezerItemCategory
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -46,11 +57,19 @@ class FreezerItemCategory
         return $this;
     }
 
-    public function getDefaultValidity(): ?int
+    /**
+     * @return int|null
+     */
+    public function getDefaultValidity()
     {
         return $this->defaultValidity;
     }
 
+    /**
+     * @param int $defaultValidity
+     *
+     * @return FreezerItemCategory
+     */
     public function setDefaultValidity(int $defaultValidity): self
     {
         $this->defaultValidity = $defaultValidity;
