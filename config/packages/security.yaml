@@ -25,10 +25,10 @@ security:
                 # where to redirect after logout
                 # target: app_any_route
 
-#            remember_me:
-#                secret:   '%kernel.secret%'
-#                lifetime: 604800 # 1 week in seconds
-#                path:     /
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
 #                always_remember_me: true
 
     # Easy way to control access for large sections of your site

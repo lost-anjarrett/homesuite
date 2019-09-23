@@ -2,8 +2,11 @@
 
 {% block title %}Home{% endblock %}
 
-{% block body %}
-    <p>nom : {{ house.name }}</p>
+{% block page_title %}Home{% endblock %}
+
+{% block page_content %}
+
+    <p>Welcome in {{ house.name }}</p>
     <div>
         {% if house.menu is not empty %}
             <a href="{{ path('menu_home', {menu: house.menu}) }}">Menu</a>
@@ -14,4 +17,5 @@
     <div>
         <a href="{{ path('freezer_home') }}">Add Freezer +</a>
     </div>
+
 {% endblock %}
