@@ -19,7 +19,6 @@ security:
             guard:
                 authenticators:
                     - App\Security\AppUserAuthenticator
-#            login:
             logout:
                 path: app_logout
                 # where to redirect after logout

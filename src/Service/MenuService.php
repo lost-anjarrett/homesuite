@@ -76,4 +76,15 @@ class MenuService
             return $day->getDate() == $plannedDay->getDate();
         });
     }
+
+    /**
+     * @param Day[} $days
+     */
+    public function sortDays(array $days)
+    {
+        usort($days, function (Day $a, Day $b) {
+            return $a->getDate()->getTimestamp() - $b->getDate()->getTimestamp();
+        });
+        return $days;
+    }
 }
