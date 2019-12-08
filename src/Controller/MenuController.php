@@ -55,12 +55,11 @@ class MenuController extends AbstractController
         }
 
         $plannedDays = $menuService->fillPlanningWithNewDays($menu);
-
         $plannedDays = $menuService->sortDays($plannedDays->getValues());
 
         $form = $this->createForm(PlanningType::class, ['days' => $plannedDays]);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $days = $form->getData()['days'];
             foreach ($days as $day) {
@@ -73,7 +72,6 @@ class MenuController extends AbstractController
 
         return $this->render('menu/index.html.twig', [
             'form' => $form->createView(),
-            'plannedDays' => $plannedDays,
         ]);
     }
 

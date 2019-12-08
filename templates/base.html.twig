@@ -11,17 +11,17 @@
     </head>
     <body>
         {% block body %}
-            <div class="container-fluid">
-                <header class="row">
+            <div class="container-raw">
+                <header class="row no-gutters">
                     <div class="col-sm"></div>
-                    <div class="col-sm text-center">
+                    <div class="col-sm text-center pipe build-a-wall bg-secondary">
                         <h1>{% block page_title %}{% endblock %}</h1>
                     </div>
                     <div class="col-sm"></div>
                 </header>
-                <main class="row">
+                <main class="row no-gutters">
                     <div class="col-sm"></div>
-                    <div class="col-sm">
+                    <div class="col-sm pipe">
                         {% block page_content %}{% endblock %}
                     </div>
                     <div class="col-sm"></div>

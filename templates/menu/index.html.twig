@@ -7,16 +7,30 @@
 {% block page_content %}
 
     {{ form_start(form) }}
-        {% for day in form.days %}
-
-            <div class="col-12">
-                <h4>{{ day.vars.data.date | date('l Y-m-d') }}</h4>
+        {% for i, day in form.days %}
+            <div
+                    class="
+                        col-sm
+                        tile
+                        full-width
+                        {{ (i is even) ? 'light-bg' : '' }}
+                    "
+                    style="flex-direction: column; justify-content: center">
+                <div class="col-12 text-left underlined">
+                    <h4>{{ day.vars.data.date | date('l Y-m-d') }}</h4>
+                </div>
+                {% for meal in day.meals %}
+                    <div class="col-12 text-left">
+                        <h5>{{ meal.vars.data.type | capitalize }}</h5>
+                    </div>
+                    <div class="col-12 text-center fill-in-width">
+                        {{ form_row(meal.description) }}
+                    </div>
+                {% endfor %}
+                <div class="col-sm text-right">
+                    <input type="submit" value="Validate" class="btn">
+                </div>
             </div>
-            {% for meal in day.meals %}
-                <h5>{{ meal.vars.data.type }}</h5>
-                <div class="col-12">{{ form_row(meal.description) }}</div>
-            {% endfor %}
-            <input type="submit" value="OK" class="btn">
         {% endfor %}
     {{ form_end(form) }}
 

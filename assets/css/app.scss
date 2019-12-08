@@ -1,17 +1,51 @@
-$tropical_rain_forest: #09755D;
-$smoky_black: #0A090C;
 $isabelline: #F0EDEE;
+$peynes_gray: #4f6d7a;
+$smoky_black: #0A090C;
 $rich_black: #07393C;
-$baby_blue: #90DDF0;
+$wheat: #e8dab2;
+$verm: #dd6e42;
 
+$bg-primary: $isabelline;
+$bg-primary-light25: scale_color($isabelline, $lightness: 25%);
+$bg-primary-light75: scale_color($isabelline, $lightness: 75%);
+$bg-primary-dark5: scale_color($isabelline, $lightness: -5%);
+$bg-secondary: $wheat;
+$color-primary: $peynes_gray;
+$color-secondary: $verm;
+$black: $rich_black;
 
 /*  */
 body,
 html {
-    background-color: $isabelline;
-    color: $smoky_black;
+    background-color: $bg-primary;
+    color: $color-primary;
     /*font-family: 'Quicksand', sans-serif;*/
     font-family: 'Nanum Gothic', sans-serif;
+}
+h1,
+h2,
+h3,
+h4 {
+    color: $verm;
+}
+
+.dark-bg {
+    background-color: $bg-primary-dark5;
+}
+.light-bg {
+    background-color: $bg-primary-light25;
+}
+h1.bg-secondary,
+.bg-secondary h1,
+h2.bg-secondary,
+.bg-secondary h2,
+h3.bg-secondary,
+.bg-secondary h3,
+h4.bg-secondary,
+.bg-secondary h4,
+.bg-secondary {
+    background-color: $bg-secondary;
+    color: $color-secondary;
 }
 
 .text-center {
@@ -24,12 +58,29 @@ html {
     text-align: left;
 }
 
+.full-width,
+.fill-in-width * {
+    width: 100%;
+}
+.underlined {
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: $color-primary;
+}
+.pipe {
+    border-right: 1px solid $black;
+    border-left: 1px solid $black;
+}
+.build-a-wall {
+    border-bottom: 1px solid $black;
+}
+
 .btn, 
 a.btn, 
 input[type="submit"].btn,
 button.btn {
-    color: $isabelline;
-    background: $tropical_rain_forest;
+    color: $bg-primary-light75;
+    background: $color-secondary;
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
     border-radius: 15px;
@@ -37,11 +88,11 @@ button.btn {
 
 a {
     text-decoration: underline;
-    color: $tropical_rain_forest;
+    color: $color-primary;
 }
 
 a:hover {
-    color: $tropical_rain_forest;
+    color: $color-primary;
     font-weight: bold;
 }
 
@@ -53,4 +104,8 @@ a:hover {
     form + form {
         margin-top: 8px;
     }
+}
+
+.tile {
+    padding: 10px 0 10px 0;
 }

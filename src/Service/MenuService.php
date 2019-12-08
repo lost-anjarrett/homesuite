@@ -78,7 +78,9 @@ class MenuService
     }
 
     /**
-     * @param Day[} $days
+     * @param array $days
+     *
+     * @return array
      */
     public function sortDays(array $days)
     {
