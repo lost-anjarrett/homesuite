@@ -1,7 +1,8 @@
 security:
     encoders:
         App\Entity\User:
-            algorithm: auto
+            # symfony suggests to set to auto, but in 4.3 it uses libsodium which may not be installed on your hosting server
+            algorithm: argon2i
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
