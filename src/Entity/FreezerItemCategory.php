@@ -58,6 +58,7 @@ class FreezerItemCategory
     }
 
     /**
+     * in days
      * @return int|null
      */
     public function getDefaultValidity()
