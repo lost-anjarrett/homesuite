@@ -1,0 +1,30 @@
+{{ form_start(freezerItemForm) }}
+<div class="row">
+    <div class="col-12">
+        {{ form_row(freezerItemForm.description) }}
+    </div>
+    <div class="col-12">
+        {{ form_row(freezerItemForm.category) }}
+    </div>
+    <div class="col-12">
+        {{ form_label(freezerItemForm.dateExpiry) }}
+        {{ form_widget(freezerItemForm.dateExpiry) }}
+    </div>
+    <div class="col-12 inline-text-and-select">
+        {{ form_widget(freezerItemForm.quantity) }} {{ form_widget(freezerItemForm.unit) }}
+    </div>
+    <div class="col-12">
+        <input type="submit" value="Add">
+    </div>
+</div>
+{{ form_end(freezerItemForm) }}
+{% if is_granted('remove', freezerItemForm.vars.value) %}
+    <div class="col-12">
+        <form action="{{ path('freezer_item_remove', {id: freezerItemForm.vars.value.id}) }}" method="post">
+            <input type="submit" value="Remove" id="removeFreezerItem">
+        </form>
+    </div>
+{% endif %}
+
+<script>
+</script>
