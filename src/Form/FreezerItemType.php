@@ -22,7 +22,6 @@ class FreezerItemType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        dump($options);
         $builder->add('description', TextType::class, [
                 'attr' => ['placeholder' => 'description'],
                 'label' => false,
