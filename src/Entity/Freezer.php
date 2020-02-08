@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -86,6 +87,17 @@ class Freezer
     public function getItems(): Collection
     {
         return $this->items;
+    }
+
+    /**
+     * @return Collection|FreezerItem[]
+     */
+    public function getActualItems(): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->isNull('dateRemoval'));
+
+        return $this->items->matching($criteria);
     }
 
     public function addItem(FreezerItem $item): self
