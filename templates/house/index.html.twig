@@ -45,13 +45,15 @@
                 <h4>Freezer</h4>
                 {% if house.freezers is not empty %}
                     {% for freezer in house.freezers %}
-                        <svg id="i-archive" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                            <path d="M4 10 L4 28 28 28 28 10 M2 4 L2 10 30 10 30 4 Z M12 15 L20 15" />
-                        </svg>
-                        <p>{{ freezer.name }}</p>
+                        <a href="{{ path('freezer_freezer', {id: freezer.id}) }}">
+                            <svg id="i-archive" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M4 10 L4 28 28 28 28 10 M2 4 L2 10 30 10 30 4 Z M12 15 L20 15" />
+                            </svg>
+                            <p>{{ freezer.name }}</p>
+                        </a>
                     {% endfor %}
                 {% endif %}
-                <a href="{{ path('freezer_home') }}">
+                <a href="{{ path('freezer_new') }}">
                     <svg id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                         <path d="M16 2 L16 30 M2 16 L30 16" />
                     </svg>
