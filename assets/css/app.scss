@@ -64,6 +64,23 @@ h4.bg-secondary,
     text-align: left;
 }
 
+.text-small {
+    font-size: 0.85em;
+}
+.text-smaller {
+    font-size: 0.7em;
+}
+.text-tiny {
+    font-size: 0.5em;
+}
+.text-big {
+    font-size: 1.2em;
+}
+
+.text-color-secondary {
+    color: $color-secondary;
+}
+
 .full-width,
 .fill-in-width * {
     width: 100%;
@@ -103,6 +120,16 @@ header a {
 a:hover {
     color: $color-primary;
     font-weight: bold;
+}
+
+a.app-link {
+    text-decoration: none;
+    color: $color-primary;
+}
+a.app-link:hover {
+    color: $color-primary;
+    background: $bg-primary-light75;
+    font-weight: inherit;
 }
 
 .space-after-all + .space-after-all {
