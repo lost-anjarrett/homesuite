@@ -15,10 +15,11 @@ class FreezerItem
     use DefaultDatetimeTrait;
 
     const UNITS = [
-        'persons',
-        'grams',
-        'milliliters',
-        'percents',
+        'persons' => 'persons',
+        'grams' => 'grams',
+        'milliliters' => 'milliliters',
+        'percents' => 'percents',
+        'units' => 'units',
     ];
 
     /**
@@ -31,6 +32,7 @@ class FreezerItem
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\FreezerItemCategory")
      * @ORM\JoinColumn(nullable=false)
+     * @var FreezerItemCategory
      */
     private $category;
 
@@ -51,6 +53,7 @@ class FreezerItem
     private $unit;
 
     /**
+     * @var \DateTime $dateExpiry
      * @ORM\Column(type="datetime")
      */
     private $dateExpiry;
