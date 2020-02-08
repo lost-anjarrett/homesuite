@@ -242,4 +242,24 @@ class FreezerItem
 
         return $this;
     }
+
+    public function expiresSoon()
+    {
+        if ($this->category->getDefaultValidity() <= 30) {
+            $soon = 7;
+        } elseif ($this->category->getDefaultValidity() <= 60) {
+            $soon = 15;
+        } else {
+            $soon = 30;
+        }
+
+        return (0 < $this->dateExpiry->getTimestamp() - time()
+            && $this->dateExpiry->getTimestamp() - time() < ($soon * 24 * 60 * 60)
+        );
+    }
+
+    public function hasExpired()
+    {
+        return (0 >= $this->dateExpiry->getTimestamp() - time());
+    }
 }
