@@ -105,7 +105,7 @@ class FreezerController extends AbstractController
             return $this->redirectToRoute('freezer_freezer', ['id' => $freezer->getId()]);
         }
 
-        return $this->render('freezer/item-form.html.twig', ['freezerItemForm' => $form->createView()]);
+        return $this->render('freezer/item-form.html.twig', ['freezerItemForm' => $form->createView(), 'submitValue' => 'Add']);
     }
 
     /**
@@ -138,7 +138,7 @@ class FreezerController extends AbstractController
             return $this->redirectToRoute('freezer_freezer', ['id' => $item->getFreezer()->getId()]);
         }
 
-        return $this->render('freezer/item-form.html.twig', ['freezerItemForm' => $form->createView()]);
+        return $this->render('freezer/item-form.html.twig', ['freezerItemForm' => $form->createView(), 'submitValue' => 'Update']);
     }
 
     /**
