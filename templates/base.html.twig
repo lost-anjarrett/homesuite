@@ -15,8 +15,8 @@
         {% block body %}
             <div class="container-raw">
                 <header class="row no-gutters">
-                    <div class="col-md-4 col-sm-12"></div>
-                    <div class="row col-md-4 col-sm-12 text-center pipe build-a-wall bg-secondary no-gutters align-items-center">
+                    <div class="col-xl-4 col-md-1 col-sm-12 display-at-sm"></div>
+                    <div class="row col-xl-4 col-md-10 col-sm-12 text-center pipe build-a-wall bg-secondary no-gutters align-items-center">
                         <div class="col">
                             {% if app.user %}
                                 <a href="{{ path('home') }}">
@@ -39,14 +39,14 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-12"></div>
+                    <div class="col-xl-4 col-md-1 col-sm-12 display-at-sm"></div>
                 </header>
                 <main class="row no-gutters">
-                    <div class="col-md-4 col-sm-12"></div>
-                    <div class="col-md-4 col-sm-12 pipe">
+                    <div class="col-xl-4 col-md-1 col-sm-12 display-at-sm"></div>
+                    <div class="col-xl-4 col-md-10 col-sm-12 pipe">
                         {% block page_content %}{% endblock %}
                     </div>
-                    <div class="col-md-4 col-sm-12"></div>
+                    <div class="col-xl-4 col-md-1 col-sm-12 display-at-sm"></div>
                 </main>
                 <footer class="row">
                     {% block page_footer%}{% endblock %}

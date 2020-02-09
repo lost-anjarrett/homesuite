@@ -192,3 +192,28 @@ a.app-link:hover {
 .inline-text-and-select select {
     width: 35%;
 }
+
+.freezer-item a {
+    padding: 5px;
+    display: inline-block;
+    width: 100%;
+}
+
+.display-at-sm {
+    display: none;
+}
+
+@media (min-width: 576px) {
+    .display-at-sm {
+        display: block;
+    }
+}
+
+.flex-direction-column {
+    flex-direction: column;
+}
+
+.icon {
+    display: inline-block;
+    vertical-align: middle;
+}

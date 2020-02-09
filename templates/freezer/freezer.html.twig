@@ -5,18 +5,18 @@
 {% block page_title %}Freezer{% endblock %}
 
 {% block page_content %}
-    <div class="col-12-row">
+    <div class="container">
         <h3 class="underlined">Let's see what's in {{ freezer.name ? freezer.name : 'this freezer' }}</h3>
+        <p class="flex-row align-items-center">
+            <svg class="icon" id="i-info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path d="M16 14 L16 23 M16 8 L16 10" />
+                <circle cx="16" cy="16" r="14" />
+            </svg>
+            Click on an item to adjust quantity or remove it.
+        </p>
         <div class="col-12 no-gutters row">
-            <p class="row align-items-center">
-                <svg id="i-info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                    <path d="M16 14 L16 23 M16 8 L16 10" />
-                    <circle cx="16" cy="16" r="14" />
-                </svg>
-                Click on an item to adjust quantity or remove it.
-            </p>
-            <div class="col-3 text-center">
-                <a class="app-link freezer-item" id="myBtn" href="{{ path('freezer_item_add', {id: freezer.id}) }}">
+            <div class="col-4 col-sm-3 col-lg-2 text-center freezer-item">
+                <a class="app-link" id="myBtn" href="{{ path('freezer_item_add', {id: freezer.id}) }}">
                     <h5 class="row align-items-center justify-content-center">Add item</h5>
                     <svg id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                         <path d="M16 2 L16 30 M2 16 L30 16" />
@@ -24,9 +24,10 @@
                 </a>
             </div>
             {% for item in freezer.actualItems %}
-                <div class="col-3 text-center">
-                    <a class="app-link freezer-item" href="{{ path('freezer_item_update', { id: item.id }) }}">
+                <div class="col-4 col-sm-3 col-lg-2 text-center light-bg freezer-item">
+                    <a class="app-link" href="{{ path('freezer_item_update', { id: item.id }) }}">
                         <h5 class="row align-items-center justify-content-center {{ (item.hasExpired) ? 'text-color-secondary' }}">
+                            {{ item.category.name ~ ' ' }}
                             {% if item.expiresSoon %}
                                 <svg id="i-flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="#dd6e42" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
                                     <path d="M6 2 L6 30 M6 6 L26 6 20 12 26 18 6 18" />
@@ -38,7 +39,6 @@
                                     <path d="M6 6 L26 26" />
                                 </svg>
                             {% endif %}
-                            {{ item.category.name }}
                         </h5>
                         <svg id="i-bag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                             <path d="M5 9 L5 29 27 29 27 9 Z M10 9 C10 9 10 3 16 3 22 3 22 9 22 9" />
@@ -68,7 +68,7 @@
             const modalContent = modal.querySelector(".modal-content p");
             const closeModalSpan = modal.getElementsByClassName("close")[0];
 
-            const items = document.getElementsByClassName("freezer-item");
+            const items = document.querySelectorAll(".freezer-item a");
 
             // Each item will open modal, with form in it
             for (item of items) {
