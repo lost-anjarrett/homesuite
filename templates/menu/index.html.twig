@@ -38,4 +38,46 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        window.addEventListener( "load", function () {
+            const XHR = new XMLHttpRequest();
+            // Define what happens on successful data submission
+            XHR.addEventListener("load", function (event) {
+                console.log(event.target.responseText);
+            });
+
+            // Define what happens in case of error
+            XHR.addEventListener("error", function (event) {
+                console.error('Menu update was not successful, check out server logs for more info');
+            });
+
+            // Access the form element...
+            let form = document.querySelector('form[name="planning"]');
+            let inputValueOnFocus ='';
+
+            inputs = document.querySelectorAll('input[type="text"]');
+            for (input of inputs) {
+                input.addEventListener('focus', function(event) {
+                    inputValueOnFocus = this.value.trim();
+                });
+
+                input.addEventListener('blur', function(event) {
+                    val = this.value.trim();
+
+                    if (val !== inputValueOnFocus) {
+                        console.log('changed');
+                        const FD = new FormData(document.querySelector('form[name="planning"]'));
+
+                        // Set up our request
+                        XHR.open("POST", "{{ path('menu_home') }}");
+                        XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                        // The data sent is what the user provided in the form
+                        XHR.send(FD);
+                    }
+                });
+            }
+
+        });
+    </script>
 {% endblock %}

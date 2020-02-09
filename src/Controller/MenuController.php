@@ -39,6 +39,12 @@ class MenuController extends AbstractController
 {
     /**
      * @Route("/", name="home")
+     * @param EntityManagerInterface $manager
+     * @param Request $request
+     * @param MenuService $menuService
+     *
+     * @return Response
+     * @throws \Exception
      */
     public function home(EntityManagerInterface $manager, Request $request, MenuService $menuService): Response
     {
@@ -67,7 +73,10 @@ class MenuController extends AbstractController
             }
             $manager->flush();
 
-            return $this->redirectToRoute('menu_home');
+            // If it was called from AJAX , no need to render whole view
+            if ($request->isXmlHttpRequest()) {
+                return new Response('OK');
+            }
         }
 
         return $this->render('menu/index.html.twig', [
