@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MealRepository")
@@ -45,6 +46,17 @@ abstract class Meal
      * @ORM\JoinColumn(nullable=true)
      */
     protected $creator;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $notes;
+
+    /**
+     * @ORM\Column(type="string", length=2100, nullable=true)
+     * @Assert\Url(message="url is not valid")
+     */
+    private $recipeUrl;
 
     /**
      * @return int|null
@@ -118,4 +130,28 @@ abstract class Meal
      * @return string
      */
     abstract public function getType(): string;
+
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(string $notes = null): self
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function getRecipeUrl()
+    {
+        return $this->recipeUrl;
+    }
+
+    public function setRecipeUrl(string $recipeUrl = null): self
+    {
+        $this->recipeUrl = $recipeUrl;
+
+        return $this;
+    }
 }
