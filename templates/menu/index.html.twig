@@ -19,16 +19,46 @@
                         full-width
                         {{ (i is even) ? 'light-bg' : '' }}
                     "
-                            style="flex-direction: column; justify-content: center">
+                            style="flex-direction: column; justify-content: center"
+                            id="days-{{ i }}"
+                    >
                         <div class="col-12 text-left underlined">
                             <h4>{{ day.vars.data.date | date('l Y-m-d') }}</h4>
                         </div>
                         {% for meal in day.meals %}
+                            {% set selector = (meal.vars.data.type ~ '-' ~ i) %}
                             <div class="col-12 text-left">
                                 <h5>{{ meal.vars.data.type | capitalize }}</h5>
                             </div>
-                            <div class="col-12 text-center fill-in-width">
-                                {{ form_row(meal.description) }}
+                            <div>
+                                <div class="col-12 text-center fill-in-width">
+                                    {{ form_widget(meal.description, {
+                                        'attr': {
+                                            'data-modal-selector': selector
+                                        }}
+                                    ) }}
+                                </div>
+                                <div class="col-12 text-left">
+                                    {% if meal.vars.data.recipeUrl is not empty %}
+                                        <a href="{{ meal.vars.data.recipeUrl }}">
+                                            <svg id="i-link" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                                <path d="M18 8 C18 8 24 2 27 5 30 8 29 12 24 16 19 20 16 21 14 17 M14 24 C14 24 8 30 5 27 2 24 3 20 8 16 13 12 16 11 18 15" />
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+                                    {% if meal.vars.data.notes is not empty %}
+                                        <a href="#" class="display-info" data-selector="{{ selector }}">
+                                            <svg id="i-info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                                <path d="M16 14 L16 23 M16 8 L16 10" />
+                                                <circle cx="16" cy="16" r="14" />
+                                            </svg>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div id="extra-fields-{{ selector }}">
+                                <div style="display: none" id="form-notes-{{ selector }}">{{ form_row(meal.notes) }}</div>
+                                <div style="display: none" id="form-recipeUrl-{{ selector }}">{{ form_row(meal.recipeUrl) }}</div>
                             </div>
                         {% endfor %}
                         <div class="col-sm text-right">
@@ -39,6 +69,36 @@
             </div>
         </div>
     {{ form_end(form) }}
+    <div  id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="row">
+                <div class="col-md-4 offset-md-4 col-xs-12">
+                    <div class="col-xs-12">
+                        <label for="modal-field-notes">Extra notes</label>
+                        <textarea id="modal-field-notes" data-form-target="notes"></textarea>
+                    </div>
+                    <div class="col-xs-12">
+                        <label for="modal-field-recipeUrl">Recipe's url</label>
+                        <input id="modal-field-recipeUrl" type="url" data-form-target="recipeUrl"/>
+                    </div>
+                    <div class="col-xs-12">
+                        <input type="submit" value="Validate" class="btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div  id="modalInfo" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="col-md-4 offset-md-4 col-xs-12">
+                <p></p>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
@@ -46,10 +106,41 @@
     {{ parent() }}
     <script>
         window.addEventListener( "load", function () {
+            // Get modal, modal content and close button
+            const modal = document.getElementById("myModal");
+            const modalContent = modal.querySelector(".modal-content p");
+            const closeModalSpan = modal.querySelector(".close");
+
+            const modalInfo = document.getElementById("modalInfo");
+            const modalInfoContent = modalInfo.querySelector(".modal-content p");
+            const closeModalInfoSpan = modalInfo.querySelector(".close");
+
+            // When the user clicks on <span> (x), close the modal
+            closeModalSpan.onclick = function() {
+                modal.style.display = "none";
+            };
+            closeModalInfoSpan.onclick = function() {
+                modalInfo.style.display = "none";
+                modalInfoContent.html = '';
+            };
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+                if (event.target == modalInfo) {
+                    modalInfo.style.display = "none";
+                    modalInfoContent.html = '';
+                }
+            };
+
+
             const XHR = new XMLHttpRequest();
             // Define what happens on successful data submission
             XHR.addEventListener("load", function (event) {
                 console.log(event.target.responseText);
+                modal.style.display = "none";
             });
 
             // Define what happens in case of error
@@ -57,8 +148,6 @@
                 console.error('Menu update was not successful, check out server logs for more info');
             });
 
-            // Access the form element...
-            let form = document.querySelector('form[name="planning"]');
             let inputValueOnFocus ='';
 
             inputs = document.querySelectorAll('input[type="text"]');
@@ -67,23 +156,54 @@
                     inputValueOnFocus = this.value.trim();
                 });
 
+                // when changing value of a meal, display modal for extra fields
                 input.addEventListener('blur', function(event) {
                     val = this.value.trim();
 
                     if (val !== inputValueOnFocus) {
-                        console.log('changed');
-                        const FD = new FormData(document.querySelector('form[name="planning"]'));
-
-                        // Set up our request
-                        XHR.open("POST", "{{ path('menu_home') }}");
-                        XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-                        // The data sent is what the user provided in the form
-                        XHR.send(FD);
+                        modal.style.display = "block";
+                        modal.dataset.selector = this.dataset.modalSelector;
                     }
                 });
             }
 
+            infos = document.querySelectorAll('a.display-info');
+            for (info of infos) {
+                info.addEventListener('click', function(event) {
+                    modalInfo.style.display = "block";
+                    event.preventDefault();
+                    modalInfoContent.innerHTML = document.querySelector('#form-notes-'+this.dataset.selector+ ' input').value;
+                })
+            }
+
+            document.querySelector('#myModal input[type="submit"]').onclick = function (e) {
+                e.preventDefault();
+                let selector = modal.dataset.selector;
+                let inputNotes = modal.querySelector('#modal-field-notes');
+                let inputRecipeUrl = modal.querySelector('#modal-field-recipeUrl');
+
+                let valNotes = inputNotes.value.trim();
+                if (valNotes !== '') {
+                    document.querySelector('#form-notes-'+selector+ ' input').value = valNotes;
+                }
+
+                let valRecipeUrl = inputRecipeUrl.value.trim();
+                if (valRecipeUrl !== '') {
+                    document.querySelector('#form-recipeUrl-'+selector+ ' input').value = valRecipeUrl;
+                }
+
+                inputNotes.value = '';
+                inputRecipeUrl.value = '';
+
+                const FD = new FormData(document.querySelector('form[name="planning"]'));
+
+                // Set up our request
+                XHR.open("POST", "{{ path('menu_home') }}");
+                XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                // The data sent is what the user provided in the form
+                XHR.send(FD);
+            };
         });
     </script>
 {% endblock %}
