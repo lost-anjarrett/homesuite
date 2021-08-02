@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Entity\Meal;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,6 +20,8 @@ class MealType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('description', TextType::class, ['label' => false, 'required' => false]);
+        $builder->add('notes', TextType::class, ['label' => false, 'required' => false]);
+        $builder->add('recipeUrl', UrlType::class, ['label' => false, 'required' => false]);
     }
 
     /**
