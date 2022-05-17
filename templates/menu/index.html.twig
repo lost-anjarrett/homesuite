@@ -156,13 +156,19 @@
                     inputValueOnFocus = this.value.trim();
                 });
 
-                // when changing value of a meal, display modal for extra fields
                 input.addEventListener('blur', function(event) {
                     val = this.value.trim();
 
+                    // when changing value of a meal, submit form
                     if (val !== inputValueOnFocus) {
-                        modal.style.display = "block";
-                        modal.dataset.selector = this.dataset.modalSelector;
+                        const FD = new FormData(document.querySelector('form[name="planning"]'));
+
+                        // Set up our request
+                        XHR.open("POST", "{{ path('menu_home') }}");
+                        XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                        // The data sent is what the user provided in the form
+                        XHR.send(FD);
                     }
                 });
             }
@@ -176,6 +182,7 @@
                 })
             }
 
+            // TODO find how we will open the modal
             document.querySelector('#myModal input[type="submit"]').onclick = function (e) {
                 e.preventDefault();
                 let selector = modal.dataset.selector;
