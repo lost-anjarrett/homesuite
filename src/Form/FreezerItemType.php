@@ -3,8 +3,10 @@
 
 namespace App\Form;
 
+use App\Entity\Freezer;
 use App\Entity\FreezerItem;
 use App\Entity\FreezerItemCategory;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -13,9 +15,17 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 class FreezerItemType extends AbstractType
 {
+    private Security $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -35,7 +45,7 @@ class FreezerItemType extends AbstractType
                     /** @var FreezerItemCategory $choice */
                     return ['data-default-validity' => $choice->getDefaultValidity()];
                 },
-                'disabled' => $this->isPersisted($options['data']) ? true : false,
+                'disabled' => $this->isPersisted($options['data']),
             ])
             ->add('dateExpiry', DateType::class, [
                 'label' => 'Expires on',
@@ -49,9 +59,18 @@ class FreezerItemType extends AbstractType
             ->add('unit', ChoiceType::class, [
                 'choices' => FreezerItem::UNITS,
                 'label' => false,
-                'disabled' => $this->isPersisted($options['data']) ? true : false,
+                'disabled' => $this->isPersisted($options['data']),
             ])
         ;
+        $user = $this->security->getUser();
+        if ($user instanceof User && $user->getHouse()->getFreezers()->count() > 1) {
+            $builder->add('freezer', EntityType::class, [
+                'class' => Freezer::class,
+                'choices' => $user->getHouse()->getFreezers(),
+                'choice_label' => 'name',
+                'label' => 'move to',
+            ]);
+        }
     }
 
     /**

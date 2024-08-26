@@ -13,6 +13,13 @@
     <div class="col-12 inline-text-and-select">
         {{ form_widget(freezerItemForm.quantity) }} {{ form_widget(freezerItemForm.unit) }}
     </div>
+    {% if freezerItemForm.freezer is defined %}
+        <div class="col-12 inline-text-and-select">
+{#            {{ form_rest(freezerItemForm) }}#}
+            {{ form_label(freezerItemForm.freezer) }} {{ form_widget(freezerItemForm.freezer) }}
+        </div>
+    {% endif %}
+    {{ form_rest(freezerItemForm) }}
     <div class="col-12">
         <input type="submit" value="{{ submitValue }}">
     </div>
