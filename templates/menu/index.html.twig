@@ -66,6 +66,13 @@
                         </div>
                     </div>
                 {% endfor %}
+                <div class="col-xs full-width" style="flex-direction: row;display: flex;justify-content: space-around;">
+                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') ~ "?offset=" ~ offsets.m7 }}">&lt;&lt;</a></div>
+                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') ~ "?offset=" ~ offsets.m1 }}">&lt;</a></div>
+                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') }}">today</a></div>
+                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') ~ "?offset=" ~ offsets.p1 }}">&gt;</a></div>
+                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') ~ "?offset=" ~ offsets.p7 }}">&gt;&gt;</a></div>
+                </div>
             </div>
         </div>
     {{ form_end(form) }}
@@ -164,7 +171,7 @@
                         const FD = new FormData(document.querySelector('form[name="planning"]'));
 
                         // Set up our request
-                        XHR.open("POST", "{{ path('menu_home') }}");
+                        XHR.open("POST", "{{ path('menu_home') ~ "?offset=" ~ offsets.offset }}");
                         XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
                         // The data sent is what the user provided in the form
@@ -205,7 +212,7 @@
                 const FD = new FormData(document.querySelector('form[name="planning"]'));
 
                 // Set up our request
-                XHR.open("POST", "{{ path('menu_home') }}");
+                XHR.open("POST", "{{ path('menu_home') ~ "?offset=" ~ offsets.offset }}");
                 XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
                 // The data sent is what the user provided in the form
