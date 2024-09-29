@@ -73,10 +73,12 @@ class Menu
      * @return Collection|Day[]
      * @throws \Exception
      */
-    public function getPlannedDays(): Collection
+    public function getPlannedDays(\DateTime $startFrom): Collection
     {
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->gte('date', new \DateTime('today')));
+        $criteria
+            ->where(Criteria::expr()->gte('date', $startFrom))
+            ->andWhere(Criteria::expr()->lte('date', (clone $startFrom)->add(new \DateInterval('P7D'))));
 
         return $this->days->matching($criteria);
     }

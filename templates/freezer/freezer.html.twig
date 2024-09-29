@@ -24,7 +24,7 @@
                 </a>
             </div>
             {% for item in freezer.actualItems %}
-                <div class="col-4 col-sm-3 col-lg-2 text-center light-bg freezer-item">
+                <div class="col-4 col-sm-3 col-lg-2 text-center freezer-item">
                     <a class="app-link" href="{{ path('freezer_item_update', { id: item.id }) }}">
                         <h5 class="row align-items-center justify-content-center {{ (item.hasExpired) ? 'text-color-secondary' }}">
                             {{ item.category.name ~ ' ' }}

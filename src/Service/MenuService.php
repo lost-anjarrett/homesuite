@@ -9,29 +9,33 @@ use App\Entity\Day;
 use App\Entity\Dinner;
 use App\Entity\Lunch;
 use App\Entity\Menu;
-use App\Repository\MealRepository;
 use Doctrine\Common\Collections\Collection;
 
 class MenuService
 {
+    public function getMenuDays(Menu $menu, \DateTime $startFrom)
+    {
+        $newDays = $this->fillPlanningWithNewDays($menu, $startFrom);
+
+        return  $this->sortDays($newDays->getValues());
+    }
+
     /**
-     * @param Menu $menu
+     * Function will add empty days between already planned days (those with at least one meal registered)
      *
      * @return Day[]|Collection
      * @throws \Exception
      */
-    public function fillPlanningWithNewDays(Menu $menu)
+    private function fillPlanningWithNewDays(Menu $menu, \DateTime $startFrom)
     {
-        $nextNewDays = $this->getNextNewDays($menu, 7);
-        $plannedDays = $menu->getPlannedDays();
+        $nextNewDays = $this->getNextWeek($menu, $startFrom);
+        $plannedDays = $menu->getPlannedDays($startFrom);
 
         foreach ($nextNewDays as $nextNewDay) {
             if (!$this->isDayPlanned($nextNewDay, $plannedDays)) {
                 $plannedDays->add($nextNewDay);
             }
         }
-
-        // Fixme: have to find a way to sort by date, for now, persisted days are rendered first
 
         return $plannedDays;
     }
@@ -45,11 +49,12 @@ class MenuService
      * @return array|Day[]
      * @throws \Exception
      */
-    private function getNextNewDays(Menu $menu, int $numberOfDays): array
+    private function getNextWeek(Menu $menu, \DateTime $startFrom): array
     {
         $nextDays = [];
-        for ($i = 0; $i <= $numberOfDays; $i++) {
-            $nextDays[] = $this->getNewDay($menu, new \DateTime('today + ' . $i . ' day'));
+        for ($i = 0; $i <= 7; $i++) {
+            $date = clone $startFrom;
+            $nextDays[] = $this->getNewDay($menu, $date->add(new \DateInterval('P'.$i.'D')));
         }
 
         return $nextDays;
@@ -82,7 +87,7 @@ class MenuService
      *
      * @return array
      */
-    public function sortDays(array $days)
+    private function sortDays(array $days)
     {
         usort($days, function (Day $a, Day $b) {
             return $a->getDate()->getTimestamp() - $b->getDate()->getTimestamp();

@@ -1,18 +1,43 @@
-$isabelline: #F0EDEE;
+$isabelline: #ffc;
 $peynes_gray: #4f6d7a;
 $smoky_black: #0A090C;
 $rich_black: #07393C;
 $wheat: #e8dab2;
 $verm: #dd6e42;
 
-$bg-primary: $isabelline;
-$bg-primary-light25: scale_color($isabelline, $lightness: 25%);
-$bg-primary-light75: scale_color($isabelline, $lightness: 75%);
-$bg-primary-dark5: scale_color($isabelline, $lightness: -5%);
-$bg-secondary: $wheat;
-$color-primary: $peynes_gray;
-$color-secondary: $verm;
-$black: $rich_black;
+//$pastel_bg: #7a8d9b;
+//$pastel_g: #b2b9bf;
+//$pastel_be: #e3d4d0;
+//$pastel_nu: #eed0c6;
+//$pastel_ma: #dabeb6;
+
+//$pastel_bg: #241623;
+//$pastel_g: #6A7152;
+//$pastel_be: #E1F5E3;
+//$pastel_nu: #DDE392;
+$pastel_re: #DD6031;
+
+$pastel_bg: #241623;
+$pastel_g: #6A7152;
+$pastel_be: #F4B942;
+$pastel_nu: #97D8C4;
+$pastel_ma: #6B9AC4;
+$pastel_ni: #4059AD;
+
+
+
+//$bg-primary: #fff;
+$bg-primary: #EFF2F1;
+//$bg-primary-light25: scale_color($isabelline, $lightness: 25%);
+$bg-primary-light25: $pastel_be;
+//$bg-primary-light75: scale_color($isabelline, $lightness: 75%);
+$bg-primary-light75: $pastel_nu;
+//$bg-primary-dark5: scale_color($isabelline, $lightness: -5%);
+$bg-primary-dark5: $pastel_ma;
+$bg-secondary: $pastel_be;
+$color-primary: $pastel_bg;
+$color-secondary: $pastel_bg;
+$black: $pastel_bg;
 
 /*  */
 body,
@@ -32,7 +57,7 @@ h1,
 h2,
 h3,
 h4 {
-    color: $verm;
+    color: $pastel_bg;
 }
 
 .dark-bg {
@@ -41,6 +66,43 @@ h4 {
 .light-bg {
     background-color: $bg-primary-light25;
 }
+
+.color-tuile:nth-of-type(3n + 1) input[type=text] {
+    //background-color: scale-color($pastel_ma, $lightness: 50%);
+    background-color: $pastel_nu;
+}
+
+.color-tuile:nth-of-type(3n + 2) input[type=text] {
+    //background-color: scale-color($pastel_nu, $lightness: 50%);
+    background-color: $pastel_ma;
+}
+
+.color-tuile:nth-of-type(3n) input[type=text] {
+    //background-color: scale-color($pastel_nu, $lightness: 50%);
+    background-color: $pastel_ni;
+}
+
+.freezer-item:nth-of-type(4n + 1),
+.freezer-item:nth-of-type(4n + 1) a {
+    background-color: $bg-primary;
+    color: $pastel_bg;
+}
+
+.freezer-item:nth-of-type(4n + 2) {
+    background-color: $pastel_be;
+    color: $bg-primary;
+}
+
+.freezer-item:nth-of-type(4n + 3) {
+    background-color: $pastel_ma;
+    color: $bg-primary;
+}
+
+.freezer-item:nth-of-type(4n) {
+    background-color: $pastel_ni;
+    color: $bg-primary;
+}
+
 h1.bg-secondary,
 .bg-secondary h1,
 h2.bg-secondary,
@@ -78,7 +140,7 @@ h4.bg-secondary,
 }
 
 .text-color-secondary {
-    color: $color-secondary;
+    color: $pastel_re;
 }
 
 .full-width,
@@ -125,8 +187,10 @@ a:hover {
 a.app-link {
     text-decoration: none;
     color: $color-primary;
+    height: 100%;
 }
-a.app-link:hover {
+a.app-link:hover,
+.freezer-item a:hover {
     color: $color-primary;
     background: $bg-primary-light75;
     font-weight: inherit;
@@ -224,4 +288,40 @@ form .col-12 + .col-12 {
 
 a + a {
     margin-left: 8px;
+}
+
+input[type=text] {
+    background-color: #F4B942;
+    color: white;
+}
+
+.color-tuile + .color-tuile h4 {
+    border-top: 1px solid $pastel_bg;
+}
+
+.bottom-navbar {
+    background-color: $bg-primary;
+    position: sticky;
+    bottom: 0; left: 0;
+
+    a:hover {
+        color: inherit;
+        font-weight: inherit;
+    }
+}
+
+.bottom-navbar .navbar-link:hover {
+    background-color: $pastel_nu;
+}
+
+.freezer-item a {
+    color: white;
+}
+.freezer-item a h5 {
+    color: $pastel_bg;
+}
+.freezer-item a h5.text-color-secondary {
+    color: $pastel_re;
+    font-weight: 800;
+    text-shadow: #fff 1px 1px 2px;
 }

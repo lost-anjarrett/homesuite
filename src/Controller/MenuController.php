@@ -60,8 +60,8 @@ class MenuController extends AbstractController
             return $this->redirectToRoute('menu_new');
         }
 
-        $plannedDays = $menuService->fillPlanningWithNewDays($menu);
-        $plannedDays = $menuService->sortDays($plannedDays->getValues());
+        $offset = $request->query->get('offset') ?: '+0';
+        $plannedDays = $menuService->getMenuDays($menu, new \DateTime('today '.$offset.' days'));
 
         $form = $this->createForm(PlanningType::class, ['days' => $plannedDays]);
         $form->handleRequest($request);
@@ -81,6 +81,13 @@ class MenuController extends AbstractController
 
         return $this->render('menu/index.html.twig', [
             'form' => $form->createView(),
+            'offsets' => [
+                'm7' => $offset -7,
+                'm1' => $offset -1,
+                'offset' => $offset,
+                'p1' => $offset +1,
+                'p7' => $offset +7,
+            ],
         ]);
     }
 
