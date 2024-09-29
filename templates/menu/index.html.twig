@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Menu{% endblock %}
 
-{% block page_title %}Week{% endblock %}
+{% block page_title %}Menu{% endblock %}
 
 {% block page_content %}
 
@@ -17,13 +17,13 @@
                         col-md-6
                         tile
                         full-width
-                        {{ (i is even) ? 'light-bg' : '' }}
+                        color-tuile
                     "
                             style="flex-direction: column; justify-content: center"
                             id="days-{{ i }}"
                     >
-                        <div class="col-12 text-left underlined">
-                            <h4>{{ day.vars.data.date | date('l Y-m-d') }}</h4>
+                        <div class="col-12 text-left">
+                            <h4>{{ day.vars.data.date | date('l') }}<span style="font-weight: bold; font-size: 3em;">{{ day.vars.data.date | date(' M, d') }}</span></h4>
                         </div>
                         {% for meal in day.meals %}
                             {% set selector = (meal.vars.data.type ~ '-' ~ i) %}
@@ -61,17 +61,40 @@
                                 <div style="display: none" id="form-recipeUrl-{{ selector }}">{{ form_row(meal.recipeUrl) }}</div>
                             </div>
                         {% endfor %}
-                        <div class="col-sm text-right">
-                            <input type="submit" value="Validate" class="btn">
-                        </div>
                     </div>
                 {% endfor %}
-                <div class="col-xs full-width" style="flex-direction: row;display: flex;justify-content: space-around;">
-                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') ~ "?offset=" ~ offsets.m7 }}">&lt;&lt;</a></div>
-                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') ~ "?offset=" ~ offsets.m1 }}">&lt;</a></div>
-                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') }}">today</a></div>
-                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') ~ "?offset=" ~ offsets.p1 }}">&gt;</a></div>
-                    <div class="col-xs-2" style="padding: 7px;"><a href="{{ path('menu_home') ~ "?offset=" ~ offsets.p7 }}">&gt;&gt;</a></div>
+                <div class="col-xs full-width bottom-navbar" style="flex-direction: row;display: flex;justify-content: space-around;">
+                    <div class="col-xs-2 navbar-link" style="padding: 7px;">
+                        <a href="{{ path('menu_home') ~ "?offset=" ~ offsets.m7 }}">
+                            <svg id="i-backwards" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M16 2 L2 16 16 30 16 16 30 30 30 2 16 16 Z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-xs-2 navbar-link" style="padding: 7px;">
+                        <a href="{{ path('menu_home') ~ "?offset=" ~ offsets.m1 }}">
+                            <svg id="i-caret-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M22 30 L6 16 22 2 Z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-xs-2 navbar-link" style="padding: 7px;">
+                        <a href="{{ path('menu_home') }}">today</a>
+                    </div>
+                    <div class="col-xs-2 navbar-link" style="padding: 7px;">
+                        <a href="{{ path('menu_home') ~ "?offset=" ~ offsets.p1 }}">
+                            <svg id="i-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M10 2 L10 30 24 16 Z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-xs-2 navbar-link" style="padding: 7px;">
+                        <a href="{{ path('menu_home') ~ "?offset=" ~ offsets.p7 }}">
+                            <svg id="i-forwards" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M16 2 L30 16 16 30 16 16 2 30 2 2 16 16 Z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
