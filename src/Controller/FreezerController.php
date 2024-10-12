@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class MenuController
@@ -28,7 +29,15 @@ class FreezerController extends AbstractController
      */
     public function home(): Response
     {
-        return $this->render('freezer/index.html.twig', []);
+        /** @var User $user */
+        $user = $this->getUser();
+        $house = $user->getHouse();
+
+        if ($house === null) {
+            return $this->redirectToRoute('new_house');
+        }
+
+        return $this->render('freezer/index.html.twig', ['house' => $house]);
     }
 
     /**
@@ -65,9 +74,17 @@ class FreezerController extends AbstractController
     /**
      * @Route("/{id}", name="freezer")
      */
-    public function freezer(Freezer $freezer, EntityManagerInterface $manager): Response
+    public function freezer(Freezer $freezer, RouterInterface $router): Response
     {
-        return $this->render('freezer/freezer.html.twig', ['freezer' => $freezer]);
+        $freezerNav = [];
+        foreach ($freezer->getHouse()->getFreezers() as $ent) {
+            $freezerNav[$ent->getName()] = $router->generate('freezer_freezer', ['id' => $ent->getId()]);
+        }
+
+        return $this->render(
+            'freezer/freezer.html.twig',
+            ['freezer' => $freezer, 'freezerNav' => $freezerNav]
+        );
     }
 
     /**
