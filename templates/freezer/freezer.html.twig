@@ -6,7 +6,7 @@
 
 {% block page_content %}
     <div class="container">
-        <h3 class="underlined">Let's see what's in {{ freezer.name ? freezer.name : 'this freezer' }}</h3>
+        <h3>Let's see what's in {{ freezer.name ? freezer.name : 'this freezer' }}</h3>
         <p class="flex-row align-items-center">
             <svg class="icon" id="i-info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                 <path d="M16 14 L16 23 M16 8 L16 10" />
@@ -15,7 +15,7 @@
             Click on an item to adjust quantity or remove it.
         </p>
         <div class="col-12 no-gutters row">
-            <div class="col-4 col-sm-3 col-lg-2 text-center freezer-item">
+            <div class="col-sm-4 text-center freezer-item">
                 <a class="app-link" id="myBtn" href="{{ path('freezer_item_add', {id: freezer.id}) }}">
                     <h5 class="row align-items-center justify-content-center">Add item</h5>
                     <svg id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
@@ -24,7 +24,7 @@
                 </a>
             </div>
             {% for item in freezer.actualItems %}
-                <div class="col-4 col-sm-3 col-lg-2 text-center freezer-item">
+                <div class="col-sm-4 text-center freezer-item">
                     <a class="app-link" href="{{ path('freezer_item_update', { id: item.id }) }}">
                         <h5 class="row align-items-center justify-content-center {{ (item.hasExpired) ? 'text-color-secondary' }}">
                             {{ item.category.name ~ ' ' }}
@@ -45,6 +45,18 @@
                         </svg>
                         <p class="text-small">{{ item.description }}</p>
                         <p class="text-smaller">{{ item.quantity ~ ' ' ~ item.unit }}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-xs full-width bottom-navbar" style="flex-direction: row;display: flex;justify-content: space-around;">
+            {% for name, link in freezerNav %}
+                <div class="col-xs-2 navbar-link" style="padding: 7px;">
+                    <a href="{{ link }}">
+                        <svg id="i-archive" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <path d="M4 10 L4 28 28 28 28 10 M2 4 L2 10 30 10 30 4 Z M12 15 L20 15" />
+                        </svg>
+                        <p>{{ name }}</p>
                     </a>
                 </div>
             {% endfor %}
