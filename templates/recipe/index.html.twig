@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Menu{% endblock %}
+
+{% block page_title %}Menu{% endblock %}
+
+{% block page_content %}
+<div class="container">
+    <h3 class=" text-center">Your recipes</h3>
+    <hr>
+    <div class="col-12 no-gutters row ">
+        <div class="col-sm-12 recipe-list-item text-center">
+            <a class="app-link" href="{{ path('recipe_add') }}">
+                <h5 class="row align-items-center justify-content-center">
+                    <svg id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M16 2 L16 30 M2 16 L30 16" />
+                    </svg>
+                    <span style="margin-left: 15px;">Add a new recipe</span>
+                </h5>
+            </a>
+        </div>
+        {% for recipe in recipes %}
+            <div class="col-sm-12 recipe-list-item">
+                <a class="app-link" href="{{ path('recipe_update', {id: recipe.id}) }}">
+                    <h5 class="row align-items-center justify-content-center">
+                        <img style="width: 32px;margin-right: 8px" src="{{ asset('img/recipetypes/' ~ recipe.type.imageName) }}" alt="{{ recipe.type.name }}">
+                        <span>{{ recipe.title | capitalize }}</span>
+                    </h5>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{#  modal for new item / edit item  #}
+<div  id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Some text in the Modal..</p>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.onload = function() {
+            // Get modal, modal content and close button
+            const modal = document.getElementById("myModal");
+            const modalContent = modal.querySelector(".modal-content p");
+            const closeModalSpan = modal.getElementsByClassName("close")[0];
+
+            const items = document.querySelectorAll(".recipe-list-item a");
+
+            // Each item will open modal, with form in it
+            for (item of items) {
+                item.onclick = function(event) {
+                    event.preventDefault();
+                    modal.style.display = "block";
+                    xhr.open('POST', this.href);
+                    xhr.send();
+                }
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            closeModalSpan.onclick = function() {
+                modal.style.display = "none";
+            };
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            // Set up our HTTP request
+            const xhr = new XMLHttpRequest();
+
+            // Setup our listener to process completed requests
+            xhr.onload = function () {
+
+                // Process our return data
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // What do when the request is successful
+                    modalContent.innerHTML = xhr.response;
+
+                    const url = document.getElementById("recipe_url");
+                    const gotoBtn = document.getElementById("goto_url")
+                    url.onblur = function(event) {
+                        gotoBtn.href = event.target.value;
+                    };
+                    gotoBtn.href = url.value;
+
+                } else {
+                    // What do when the request fails
+                    console.log('The request failed!');
+                    console.log(xhr.status);
+                    console.log(xhr.response);
+                }
+
+                // Code that should run regardless of the request status
+                // console.log('This always runs...');
+            };
+        };
+    </script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{{ form_start(recipeForm) }}
+<div class="row">
+    <div class="col-12">
+        {{ form_row(recipeForm.title) }}
+    </div>
+    <div class="col-12">
+        {{ form_row(recipeForm.type) }}
+    </div>
+    <div class="col-12">
+        {{ form_row(recipeForm.details) }}
+    </div>
+    <div class="col-12">
+        {{ form_row(recipeForm.url) }} <a id="goto_url" href="" class="btn">go</a>
+    </div>
+    <div class="col-12">
+        {{ form_row(recipeForm.comments) }}
+    </div>
+    {{ form_rest(recipeForm) }}
+    <div class="col-12">
+        <input type="submit" value="{{ submitValue }}">
+    </div>
+</div>
+{{ form_end(recipeForm) }}
+
+<script>
+</script>
