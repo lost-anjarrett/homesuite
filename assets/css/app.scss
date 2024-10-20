@@ -116,6 +116,21 @@ h4.bg-secondary,
     color: $color-secondary;
 }
 
+.bg-1, .bg-1 h4 {
+    background-color: $pastel_nu;
+    color: white;
+}
+
+.bg-2, .bg-2 h4 {
+    background-color: $pastel_ma;
+    color: white;
+}
+
+.bg-3, .bg-3 h4 {
+    background-color: $pastel_ni;
+    color: white;
+}
+
 .text-center {
     text-align: center;
 }
@@ -324,4 +339,9 @@ input[type=text] {
     color: $pastel_re;
     font-weight: 800;
     text-shadow: #fff 1px 1px 2px;
+}
+
+.recipe-list-item {
+    height: 50px;
+    padding: 8px;
 }
